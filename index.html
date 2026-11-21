@@ -33,7 +33,7 @@
     <img class="logo" src="/icons/icon.svg" width="72" height="72" alt="" style="image-rendering:pixelated;display:block;margin:0 auto 10px;filter:drop-shadow(0 0 10px rgba(62,240,255,.45))">
     <div class="sub">GAMES.ECKERTHAUS.COM</div>
     <h1 style="font-size:24px">ECKERTHAUS<br>ARCADE</h1>
-    <div class="coin blink">INSERT COIN</div>
+    <div class="coin blink" id="coin">INSERT COIN</div>
   </header>
 
   <section class="screen" style="justify-content:flex-start;min-height:0">
@@ -84,6 +84,8 @@
       '<div class="tag' + (best !== null ? ' hi' : '') + '">' + (best !== null ? (Scores.lower(bestKey) ? 'BEST ' : 'HI ') + Scores.fmt(bestKey, best) : 'PLAY') + '</div>';
     grid.appendChild(a);
   });
+  function paintNet() { document.getElementById('coin').textContent = navigator.onLine ? 'INSERT COIN' : 'OFFLINE MODE'; }
+  window.addEventListener('online', paintNet); window.addEventListener('offline', paintNet); paintNet();
   Auth.require();
   document.getElementById('out').addEventListener('click', function () { Auth.signOut(); });
 </script>

@@ -5,15 +5,27 @@
     auth: { persistSession: true, autoRefreshToken: true }
   });
 
+  function stored() {
+    try {
+      var o = JSON.parse(localStorage.getItem('sb-' + cfg.url.split('//')[1].split('.')[0] + '-auth-token'));
+      return o && o.access_token && o.user ? o : null;
+    } catch (e) { return null; }
+  }
   function reveal() { document.documentElement.classList.remove('auth-pending'); }
   function onLogin() { return /\/login\.html$/.test(location.pathname); }
 
   window.Auth = {
     client: client,
     reveal: reveal,
+    // Offline-friendly: with no connection (or a failed token refresh), fall back to the sign-in saved on this device.
     session: function () {
-      return client.auth.getSession().then(function (r) { return r.data.session; });
+      return client.auth.getSession().then(function (r) {
+        if (r.data && r.data.session) return r.data.session;
+        var netErr = r.error && /fetch|network|load failed/i.test(r.error.message || '');
+        return (!navigator.onLine || netErr) ? stored() : null;
+      }).catch(function () { return stored(); });
     },
+    online: function () { return navigator.onLine !== false; },
     // Call on every protected page. Redirects to the login page when signed out.
     require: function () {
       return this.session().then(function (s) {
@@ -32,6 +44,10 @@
       return client.auth.signOut().then(function () { location.replace('/login.html'); });
     }
   };
+
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () { navigator.serviceWorker.register('/sw.js').catch(function () {}); });
+  }
 
   client.auth.onAuthStateChange(function (ev) {
     if (ev === 'SIGNED_OUT' && !onLogin()) location.replace('/login.html');

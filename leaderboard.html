@@ -63,14 +63,24 @@
     var h = document.createElement('h2'); h.textContent = title;
     var sm = document.createElement('small'); sm.textContent = Scores.lower(key) ? 'FASTEST' : 'HIGHEST'; h.appendChild(sm);
     var lb = document.createElement('div'); lb.className = 'lb';
+    c.hidden = true;   // stays hidden until the game has at least one score
     c.appendChild(h); c.appendChild(lb); page.appendChild(c);
     return lb;
   }
   function note(lb, t) { lb.textContent = ''; var d = document.createElement('div'); d.className = 'msg'; d.textContent = t; lb.appendChild(d); }
+  var pending = 0, shown = 0;
+  function settle() {
+    if (pending > 0) return;
+    var m = document.getElementById('none');
+    if (!shown && !m) { m = document.createElement('div'); m.id = 'none'; m.className = 'msg'; m.style.cssText = 'font-size:10px;line-height:2;color:#8c8bd0;text-align:center;padding:30px 0'; m.textContent = navigator.onLine ? 'NO SCORES YET. PLAY A GAME TO GET ON THE BOARD!' : 'YOU ARE OFFLINE. SCORES WILL SHOW WHEN YOU RECONNECT.'; page.appendChild(m); }
+    if (shown && m) m.remove();
+  }
   function fill(key, lb) {
-    note(lb, 'LOADING…');
+    pending++;
     Scores.board(key, 50).then(function (rows) {
-      if (!rows.length) { note(lb, 'NO SCORES YET'); return; }
+      pending--;
+      if (!rows.length) { settle(); return; }
+      lb.parentNode.hidden = false; shown++; settle();
       lb.textContent = '';
       rows.forEach(function (r, i) {
         var d = document.createElement('div');
@@ -82,12 +92,12 @@
         d.appendChild(rk); d.appendChild(pl); d.appendChild(sc);
         lb.appendChild(d);
       });
-    }).catch(function () { note(lb, 'COULD NOT LOAD'); });
+    }).catch(function () { pending--; settle(); });
   }
   Auth.require().then(function (s) {
     if (!s) return;
     LIST.forEach(function (g) { fill(g[0], cardFor(g[0], g[1])); });
-    if (want) setTimeout(function () { var e = document.getElementById('g-' + want); if (e) e.scrollIntoView({ block: 'start' }); }, 300);
+    if (want) setTimeout(function () { var e = document.getElementById('g-' + want); if (e && !e.hidden) e.scrollIntoView({ block: 'start' }); }, 600);
   });
 </script>
 </body>

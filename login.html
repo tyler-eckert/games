@@ -66,6 +66,7 @@
     err.textContent = '';
     var email = f.email.value.trim(), pw = f.password.value;
     if (!email || !pw) { err.textContent = 'ENTER YOUR EMAIL AND PASSWORD'; return; }
+    if (!navigator.onLine) { err.textContent = 'YOU ARE OFFLINE. CONNECT ONCE TO SIGN IN.'; return; }
     go.disabled = true; go.textContent = 'SIGNING IN...';
     Auth.signIn(email, pw).then(function (r) {
       if (r.error) {
