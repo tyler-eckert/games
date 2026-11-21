@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" class="auth-pending">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0b0a1f">
+  <title>Sign in · Eckerthaus Arcade</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/arcade.css">
+</head>
+<body>
+<main class="cab">
+  <header class="marquee" style="padding-top:18px">
+    <div class="sub">GAMES.ECKERTHAUS.COM</div>
+    <h1 style="font-size:24px">ECKERTHAUS<br>ARCADE</h1>
+    <div class="coin blink">PLAYER 1 LOGIN</div>
+  </header>
+
+  <section class="login">
+    <div class="screen" style="min-height:0;justify-content:flex-start">
+      <form id="f" novalidate>
+        <div class="field">
+          <label for="email">EMAIL</label>
+          <input id="email" name="email" type="email" autocomplete="username" inputmode="email" autocapitalize="none" spellcheck="false" required>
+        </div>
+        <div class="field">
+          <label for="pw">PASSWORD</label>
+          <input id="pw" name="password" type="password" autocomplete="current-password" required>
+        </div>
+        <div class="err" id="err" role="alert"></div>
+        <button class="big-btn" id="go" type="submit">SIGN IN</button>
+      </form>
+    </div>
+  </section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/js/config.js"></script>
+<script src="/js/auth.js"></script>
+<script>
+  // Only follow same-site relative paths after login.
+  var next = (function () {
+    var n = new URLSearchParams(location.search).get('next');
+    return n && n.charAt(0) === '/' && n.charAt(1) !== '/' && n.charAt(1) !== '\\' ? n : '/';
+  })();
+
+  Auth.session().then(function (s) {
+    if (s) location.replace(next); else Auth.reveal();
+  });
+
+  var f = document.getElementById('f'), err = document.getElementById('err'), go = document.getElementById('go');
+  f.addEventListener('submit', function (e) {
+    e.preventDefault();
+    err.textContent = '';
+    var email = f.email.value.trim(), pw = f.password.value;
+    if (!email || !pw) { err.textContent = 'ENTER YOUR EMAIL AND PASSWORD'; return; }
+    go.disabled = true; go.textContent = 'SIGNING IN...';
+    Auth.signIn(email, pw).then(function (r) {
+      if (r.error) {
+        var bad = r.error.status === 400 || /invalid/i.test(r.error.message || '');
+        err.textContent = bad ? 'WRONG EMAIL OR PASSWORD' : "CAN'T SIGN IN RIGHT NOW. TRY AGAIN";
+        go.disabled = false; go.textContent = 'SIGN IN';
+        f.password.value = ''; f.password.focus();
+      } else {
+        location.replace(next);
+      }
+    }).catch(function () {
+      err.textContent = "CAN'T SIGN IN RIGHT NOW. TRY AGAIN";
+      go.disabled = false; go.textContent = 'SIGN IN';
+    });
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0b0a1f">
+  <title>Minesweeper · Eckerthaus Arcade</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/arcade.css">
+  <script>document.documentElement.classList.add('auth-pending')</script>
+</head>
+<body>
+<main class="cab">
+  <div class="bar">
+    <a class="menu" href="../">&lt; MENU</a>
+    <div class="grow">
+      <span id="time" aria-label="Time">T 000</span>
+      <span id="left" aria-label="Mines left">M 10</span>
+      <button class="iconbtn" id="help" type="button" aria-label="How to play">?</button>
+    </div>
+  </div>
+  <header class="marquee">
+    <div class="sub">ECKERTHAUS ARCADE</div>
+    <h1>MINESWEEPER</h1>
+  </header>
+
+  <section class="screen" style="min-height:0">
+    <div class="mines" id="grid" role="grid" aria-label="Minefield"></div>
+  </section>
+
+  <div class="seg" id="levels">
+    <button class="lv on" type="button" data-lv="easy">EASY</button>
+    <button class="lv" type="button" data-lv="medium">MEDIUM</button>
+    <button class="lv" type="button" data-lv="hard">HARD</button>
+  </div>
+  <div class="actions">
+    <button class="btn" id="mode" type="button" aria-pressed="false">MODE: DIG</button>
+    <button class="btn go" id="new" type="button">NEW GAME</button>
+  </div>
+</main>
+
+<div class="overlay" id="over" role="dialog" aria-modal="true" aria-labelledby="over-title" hidden>
+  <div class="panel">
+    <h2 id="over-title"></h2>
+    <div class="line" id="over-line"></div>
+    <div class="score" id="over-score"></div>
+    <form class="initials" id="initials" hidden>
+      <label for="ini">NEW HIGH SCORE! ENTER INITIALS</label>
+      <input id="ini" maxlength="3" autocomplete="off" autocapitalize="characters" spellcheck="false" required>
+      <button class="big-btn" type="submit">SAVE</button>
+    </form>
+    <div class="table" id="table" hidden></div>
+    <button class="big-btn" id="again" type="button">PLAY AGAIN</button>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/config.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/scores.js"></script>
+<script src="../js/howto.js"></script>
+<script src="game.js"></script>
+</body>
+</html>

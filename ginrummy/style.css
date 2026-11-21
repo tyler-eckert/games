@@ -1,0 +1,27 @@
+.marquee.compact{padding:0}
+.marquee.compact h1{font-size:16px;margin-top:6px}
+.gin-screen{padding:8px;min-height:0;flex:0 0 auto;gap:10px;justify-content:flex-start}
+.zone .lbl{display:flex;justify-content:space-between;font-size:8px;color:var(--dim);padding:0 2px 4px}
+.zone .lbl b{font-weight:400;color:var(--amber)}
+.hand{position:relative;width:100%}
+.mid{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:2px 0}
+.pilebox{display:flex;flex-direction:column;align-items:center;gap:4px;flex:none}
+.plabel{font-size:7px;color:var(--mute)}
+.pilebtn{position:relative;width:52px;height:73px;padding:0;border:0;background:transparent;--cw:52px}
+.msg3{flex:1;min-width:0;font-size:9px;line-height:1.7;text-align:center;color:var(--ink)}
+.card,.pslot{position:absolute;left:0;top:0;width:var(--cw);height:calc(var(--cw)*1.4);padding:0;margin:0;border-radius:calc(var(--cw)*.12);font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-user-select:none;user-select:none;touch-action:manipulation;transition:top .1s}
+.pslot{border:2px dashed var(--line);background:transparent}
+.card{border:1px solid #14123a;background:#f4f3ff;color:#14123a;display:block;text-align:left;overflow:hidden;box-shadow:-2px 0 3px rgba(0,0,0,.4)}
+.card.red{color:#b3123a}
+.card.down{background:repeating-linear-gradient(45deg,#3a38a0 0 4px,#2a2870 4px 8px);border:2px solid #c9c8f5}
+.card .r{position:absolute;left:calc(var(--cw)*.08);top:calc(var(--cw)*.03);font-size:calc(var(--cw)*.34);font-weight:700;line-height:1.1}
+.card .s{position:absolute;left:calc(var(--cw)*.08);top:calc(var(--cw)*.36);font-size:calc(var(--cw)*.3);line-height:1}
+.card .big{position:absolute;right:calc(var(--cw)*.08);bottom:calc(var(--cw)*.02);font-size:calc(var(--cw)*.5);line-height:1}
+.card.sel{box-shadow:0 0 10px rgba(255,200,61,.8);outline:3px solid var(--amber);z-index:6}
+.card.new{outline:2px solid var(--cyan)}
+.card.laid{opacity:.95;outline:2px solid var(--green)}
+.resbox{display:flex;flex-direction:column;align-items:center;gap:12px}
+.resbox[hidden],#acts[hidden]{display:none}
+.reslines{font-size:9px;line-height:1.9;text-align:center;color:var(--ink)}
+.reslines b{font-weight:400;color:var(--amber)}
+#acts .btn{font-size:10px}

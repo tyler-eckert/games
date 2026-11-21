@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0b0a1f">
+  <title>Code-Breaker · Eckerthaus Arcade</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/arcade.css">
+  <script>document.documentElement.classList.add('auth-pending')</script>
+</head>
+<body>
+<main class="cab">
+  <div class="bar">
+    <a class="menu" href="../">&lt; MENU</a>
+    <div class="grow">
+      <span id="try" aria-live="polite">TRY 1/8</span>
+      <button class="iconbtn" id="help" type="button" aria-label="How to play">?</button>
+    </div>
+  </div>
+  <header class="marquee">
+    <div class="sub">ECKERTHAUS ARCADE</div>
+    <h1>CODE-BREAKER</h1>
+  </header>
+
+  <section class="screen" id="board" aria-label="Game board"></section>
+
+  <div class="legend">
+    <span><span class="fb exact"></span>RIGHT SPOT</span>
+    <span><span class="fb near"></span>RIGHT COLOR</span>
+  </div>
+
+  <div class="palette" id="palette"></div>
+
+  <div class="actions">
+    <button class="btn" id="del" type="button">DELETE</button>
+    <button class="btn go" id="enter" type="button" disabled>ENTER</button>
+  </div>
+</main>
+
+<div class="overlay" id="over" role="dialog" aria-modal="true" aria-labelledby="over-title" hidden>
+  <div class="panel">
+    <h2 id="over-title"></h2>
+    <div class="line" id="over-line"></div>
+    <div class="score" id="over-score"></div>
+    <form class="initials" id="initials" hidden>
+      <label for="ini">NEW HIGH SCORE! ENTER INITIALS</label>
+      <input id="ini" maxlength="3" autocomplete="off" autocapitalize="characters" spellcheck="false" required>
+      <button class="big-btn" type="submit">SAVE</button>
+    </form>
+    <div class="table" id="table" hidden></div>
+    <button class="big-btn" id="again" type="button">PLAY AGAIN</button>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/config.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/scores.js"></script>
+<script src="../js/howto.js"></script>
+<script src="game.js"></script>
+</body>
+</html>

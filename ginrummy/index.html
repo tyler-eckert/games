@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0b0a1f">
+  <title>Gin Rummy · Eckerthaus Arcade</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/arcade.css">
+  <link rel="stylesheet" href="style.css">
+  <script>document.documentElement.classList.add('auth-pending')</script>
+</head>
+<body>
+<main class="cab">
+  <div class="bar">
+    <a class="menu" href="../">&lt; MENU</a>
+    <div class="grow">
+      <span id="scores">YOU 0 / CPU 0</span>
+      <button class="iconbtn" id="help" type="button" aria-label="How to play">?</button>
+    </div>
+  </div>
+  <header class="marquee compact">
+    <div class="sub">ECKERTHAUS ARCADE</div>
+    <h1>GIN RUMMY</h1>
+  </header>
+
+  <section class="screen gin-screen">
+    <div class="zone">
+      <div class="lbl"><span>CPU</span><span id="oppInfo">10 CARDS</span></div>
+      <div class="hand" id="oppHand"></div>
+    </div>
+
+    <div class="mid">
+      <div class="pilebox"><div class="plabel">DECK</div><button class="pilebtn" id="stock" type="button" aria-label="Draw from deck"></button></div>
+      <div class="msg3" id="msg" role="status" aria-live="polite"></div>
+      <div class="pilebox"><div class="plabel">DISCARD</div><button class="pilebtn" id="disc" type="button" aria-label="Take the top discard"></button></div>
+    </div>
+
+    <div class="zone">
+      <div class="lbl"><span>YOU</span><span>DEADWOOD <b id="dw">0</b></span></div>
+      <div class="hand" id="myHand"></div>
+    </div>
+  </section>
+
+  <div class="actions" id="acts">
+    <button class="btn" id="discard" type="button" disabled>DISCARD</button>
+    <button class="btn go" id="knock" type="button" disabled>KNOCK</button>
+  </div>
+  <div class="resbox" id="resbox" hidden>
+    <div class="reslines" id="reslines"></div>
+    <button class="big-btn" id="next" type="button">NEXT HAND</button>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/config.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/scores.js"></script>
+<script src="../js/howto.js"></script>
+<script src="../js/endgame.js"></script>
+<script src="engine.js"></script>
+<script src="game.js"></script>
+</body>
+</html>

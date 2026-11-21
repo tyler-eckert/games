@@ -1,0 +1,6 @@
+.marquee.compact{padding:0}
+.marquee.compact h1{font-size:16px;margin-top:6px}
+.info{display:flex;justify-content:space-between;font-size:9px;color:var(--dim);padding:0 4px}
+.bb-screen{padding:8px;min-height:0;flex:1;display:flex;align-items:center;justify-content:center}
+.bb-screen canvas{display:block;background:#07061a;border-radius:6px;touch-action:none;-webkit-user-select:none;user-select:none}
+.hint{text-align:center;font-size:8px;color:var(--mute);min-height:1.2em}

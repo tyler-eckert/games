@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0b0a1f">
+  <title>Blockfall · Eckerthaus Arcade</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/arcade.css">
+  <link rel="stylesheet" href="style.css">
+  <script>document.documentElement.classList.add('auth-pending')</script>
+</head>
+<body>
+<main class="cab">
+  <div class="bar">
+    <a class="menu" href="../">&lt; MENU</a>
+    <div class="grow">
+      <button class="iconbtn" id="pause" type="button" aria-label="Pause">II</button>
+      <button class="iconbtn" id="help" type="button" aria-label="How to play">?</button>
+    </div>
+  </div>
+  <header class="marquee compact">
+    <div class="sub">ECKERTHAUS ARCADE</div>
+    <h1>BLOCKFALL</h1>
+  </header>
+
+  <section class="screen bf" id="screen">
+    <div class="well" id="well"><canvas id="board" aria-label="Blockfall playfield"></canvas></div>
+    <aside class="side">
+      <div>HOLD<canvas id="hold" width="64" height="48"></canvas></div>
+      <div>NEXT<canvas id="next" width="64" height="150"></canvas></div>
+      <div class="stat">SCORE<b id="s-score">0</b></div>
+      <div class="stat">LINES<b id="s-lines">0</b></div>
+      <div class="stat">LEVEL<b id="s-level">1</b></div>
+    </aside>
+  </section>
+
+  <div class="pad">
+    <button class="btn" id="b-left" type="button">LEFT</button>
+    <button class="btn" id="b-rot" type="button">ROTATE</button>
+    <button class="btn" id="b-right" type="button">RIGHT</button>
+    <button class="btn" id="b-hold" type="button">HOLD</button>
+    <button class="btn" id="b-down" type="button">DOWN</button>
+    <button class="btn go" id="b-drop" type="button">DROP</button>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/config.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/scores.js"></script>
+<script src="../js/howto.js"></script>
+<script src="../js/endgame.js"></script>
+<script src="game.js"></script>
+</body>
+</html>

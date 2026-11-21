@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0b0a1f">
+  <title>Wahoo · Eckerthaus Arcade</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/arcade.css">
+  <link rel="stylesheet" href="style.css">
+  <script>document.documentElement.classList.add('auth-pending')</script>
+</head>
+<body>
+<main class="cab">
+  <div class="bar">
+    <a class="menu" href="../">&lt; MENU</a>
+    <div class="grow">
+      <button class="iconbtn wide" id="speed" type="button" aria-pressed="false">SPEED: NORMAL</button>
+      <button class="iconbtn" id="help" type="button" aria-label="How to play">?</button>
+    </div>
+  </div>
+  <header class="marquee compact">
+    <div class="sub">ECKERTHAUS ARCADE</div>
+    <h1>WAHOO</h1>
+  </header>
+
+  <section class="screen wa-screen" id="setup">
+    <div class="setup">
+      <div class="q">HOW MANY COMPUTER OPPONENTS?</div>
+      <div class="seg" id="opps">
+        <button class="lv" type="button" data-n="1">1</button>
+        <button class="lv" type="button" data-n="2">2</button>
+        <button class="lv on" type="button" data-n="3">3</button>
+        <button class="lv" type="button" data-n="4">4</button>
+        <button class="lv" type="button" data-n="5">5</button>
+      </div>
+      <button class="big-btn" id="start" type="button">START GAME</button>
+    </div>
+  </section>
+
+  <div id="game" hidden>
+    <div class="legend2" id="legend"></div>
+    <section class="screen wa-screen">
+      <canvas id="c" aria-label="Wahoo board"></canvas>
+    </section>
+    <div class="dock">
+      <div class="die" id="die" aria-live="polite">-</div>
+      <div class="msg2" id="msg" role="status" aria-live="polite"></div>
+      <button class="btn go" id="roll" type="button" disabled>ROLL</button>
+    </div>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/config.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/scores.js"></script>
+<script src="../js/howto.js"></script>
+<script src="../js/endgame.js"></script>
+<script src="game.js"></script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0b0a1f">
+  <title>Sudoku · Eckerthaus Arcade</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/arcade.css">
+  <link rel="stylesheet" href="style.css">
+  <script>document.documentElement.classList.add('auth-pending')</script>
+</head>
+<body>
+<main class="cab">
+  <div class="bar">
+    <a class="menu" href="../">&lt; MENU</a>
+    <div class="grow">
+      <span id="time">0:00</span>
+      <button class="iconbtn" id="help" type="button" aria-label="How to play">?</button>
+    </div>
+  </div>
+  <header class="marquee compact">
+    <div class="sub">ECKERTHAUS ARCADE</div>
+    <h1>SUDOKU</h1>
+  </header>
+
+  <div class="seg" id="levels">
+    <button class="lv on" type="button" data-lv="easy">EASY</button>
+    <button class="lv" type="button" data-lv="medium">MEDIUM</button>
+    <button class="lv" type="button" data-lv="hard">HARD</button>
+    <button class="lv" type="button" data-lv="daily">DAILY</button>
+  </div>
+
+  <section class="screen su-screen">
+    <div class="su" id="grid" role="grid" aria-label="Sudoku grid"></div>
+  </section>
+
+  <div class="pad9" id="nums"></div>
+  <div class="tools">
+    <button class="btn" id="erase" type="button">ERASE</button>
+    <button class="btn" id="notes" type="button" aria-pressed="false">NOTES: OFF</button>
+    <button class="btn" id="undo" type="button">UNDO</button>
+    <button class="btn" id="hint" type="button">HINT</button>
+  </div>
+  <div class="tools">
+    <button class="btn" id="errors" type="button" aria-pressed="true">ERRORS: ON</button>
+    <button class="btn go" id="new" type="button">NEW</button>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/config.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/scores.js"></script>
+<script src="../js/howto.js"></script>
+<script src="../js/endgame.js"></script>
+<script src="engine.js"></script>
+<script src="game.js"></script>
+</body>
+</html>

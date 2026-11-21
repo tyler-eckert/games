@@ -2,10 +2,80 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Hello World</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0b0a1f">
+  <title>Eckerthaus Arcade</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/arcade.css">
+  <script>document.documentElement.classList.add('auth-pending')</script>
+  <style>
+    .tile{min-height:104px;padding:12px 6px;gap:10px}
+    .tile .name{font-size:9px}
+    .tile.live{border:2px solid var(--cyan)}
+    .tile .tag{font-size:8px;color:var(--green)}
+    .tile .tag.hi{color:var(--amber)}
+  </style>
 </head>
 <body>
-  <h1>Hello World</h1>
+<main class="cab">
+  <header class="marquee" style="padding-top:18px">
+    <div class="sub">GAMES.ECKERTHAUS.COM</div>
+    <h1 style="font-size:24px">ECKERTHAUS<br>ARCADE</h1>
+    <div class="coin blink">INSERT COIN</div>
+  </header>
+
+  <section class="screen" style="justify-content:flex-start;min-height:0">
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <div class="foot">PLAYER 1 READY <button class="linkbtn" id="out" type="button">SIGN OUT</button></div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/scores.js"></script>
+<script>
+  var GAMES = [
+    { href: 'codebreaker/', name: 'CODE-<br>BREAKER', keys: ['codebreaker'],
+      svg: '<circle cx="9" cy="12" r="7" fill="#ff4d5e"/><circle cx="25" cy="12" r="7" fill="#ffc83d"/><circle cx="41" cy="12" r="7" fill="#3ef0ff"/><circle cx="57" cy="12" r="7" fill="#e86bff"/><circle cx="12" cy="31" r="3" fill="#ffc83d"/><circle cx="24" cy="31" r="3" fill="none" stroke="#3ef0ff" stroke-width="2"/>' },
+    { href: 'minesweeper/', name: 'MINE-<br>SWEEPER', keys: ['minesweeper-easy', 'minesweeper-medium', 'minesweeper-hard'],
+      svg: '<rect x="6" y="4" width="16" height="16" rx="3" fill="#3a38a0"/><rect x="24" y="4" width="16" height="16" rx="3" fill="#07061a" stroke="#2a2870"/><rect x="42" y="4" width="16" height="16" rx="3" fill="#3a38a0"/><rect x="6" y="22" width="16" height="16" rx="3" fill="#07061a" stroke="#2a2870"/><rect x="24" y="22" width="16" height="16" rx="3" fill="#3a38a0"/><rect x="42" y="22" width="16" height="16" rx="3" fill="#07061a" stroke="#2a2870"/><text x="32" y="17" text-anchor="middle" font-size="11" fill="#3ef0ff" font-family="monospace">1</text><text x="14" y="35" text-anchor="middle" font-size="11" fill="#7dff6b" font-family="monospace">2</text><circle cx="50" cy="30" r="4" fill="#ff7be8"/>' },
+    { href: 'blockfall/', name: 'BLOCKFALL', keys: ['blockfall'],
+      svg: '<rect x="8" y="4" width="12" height="12" fill="#3ef0ff"/><rect x="20" y="4" width="12" height="12" fill="#3ef0ff"/><rect x="32" y="4" width="12" height="12" fill="#3ef0ff"/><rect x="44" y="4" width="12" height="12" fill="#3ef0ff"/><rect x="20" y="22" width="12" height="12" fill="#ffc83d"/><rect x="32" y="22" width="12" height="12" fill="#ffc83d"/>' },
+    { href: 'solitaire/', name: 'SOLITAIRE', keys: ['solitaire-draw1', 'solitaire-draw3'],
+      svg: '<rect x="8" y="6" width="22" height="30" rx="3" fill="#e9e8ff"/><rect x="34" y="6" width="22" height="30" rx="3" fill="#ff4d5e"/>' },
+    { href: 'sudoku/', name: 'SUDOKU', keys: ['sudoku-easy', 'sudoku-medium', 'sudoku-hard', 'sudoku-daily'],
+      svg: '<rect x="12" y="2" width="36" height="36" fill="none" stroke="#7dff6b" stroke-width="2"/><line x1="24" y1="2" x2="24" y2="38" stroke="#7dff6b" stroke-width="2"/><line x1="36" y1="2" x2="36" y2="38" stroke="#7dff6b" stroke-width="2"/><line x1="12" y1="14" x2="48" y2="14" stroke="#7dff6b" stroke-width="2"/><line x1="12" y1="26" x2="48" y2="26" stroke="#7dff6b" stroke-width="2"/>' },
+    { href: 'wheel/', name: 'SPIN &amp;<br>SOLVE', keys: ['wheel'],
+      svg: '<circle cx="32" cy="22" r="17" fill="#4d6bff"/><path d="M32 22 L32 5 A17 17 0 0 1 47 14 Z" fill="#ffc83d"/><path d="M32 22 L47 14 A17 17 0 0 1 49 30 Z" fill="#ff4d5e"/><path d="M32 22 L32 39 A17 17 0 0 1 17 30 Z" fill="#7dff6b"/><path d="M32 22 L17 30 A17 17 0 0 1 15 14 Z" fill="#e86bff"/><circle cx="32" cy="22" r="4" fill="#14123a"/><polygon points="28,1 36,1 32,9" fill="#ffffff"/>' },
+    { href: 'brickbounce/', name: 'BRICK<br>BOUNCE', keys: ['brickbounce'],
+      svg: '<rect x="6" y="4" width="16" height="7" fill="#e86bff"/><rect x="24" y="4" width="16" height="7" fill="#3ef0ff"/><rect x="42" y="4" width="16" height="7" fill="#ffc83d"/><rect x="15" y="13" width="16" height="7" fill="#7dff6b"/><rect x="33" y="13" width="16" height="7" fill="#ff4d5e"/><circle cx="36" cy="28" r="3" fill="#ffffff"/><rect x="22" y="35" width="20" height="4" rx="2" fill="#3ef0ff"/>' },
+    { href: 'hangman/', name: 'HANGMAN', keys: ['hangman'],
+      svg: '<g fill="none" stroke-linecap="round" stroke-width="3"><path d="M10 38 H34 M18 38 V4 H40 V9" stroke="#7a79bb"/><circle cx="40" cy="14" r="5" stroke="#ff7be8"/><path d="M40 19 V29 M40 22 L34 27 M40 22 L46 27 M40 29 L35 36" stroke="#ff7be8"/></g>' },
+    { href: 'wahoo/', name: 'WAHOO', keys: ['wahoo'],
+      svg: '<polygon points="32,3 53,13 53,31 32,41 11,31 11,13" fill="#14123a" stroke="#7a79bb" stroke-width="2"/><circle cx="32" cy="3" r="3" fill="#ff4d5e"/><circle cx="53" cy="13" r="3" fill="#ffc83d"/><circle cx="53" cy="31" r="3" fill="#7dff6b"/><circle cx="32" cy="41" r="3" fill="#3ef0ff"/><circle cx="11" cy="31" r="3" fill="#4d6bff"/><circle cx="11" cy="13" r="3" fill="#e86bff"/><circle cx="32" cy="22" r="4" fill="none" stroke="#ffc83d" stroke-width="2"/>' },
+    { href: 'ginrummy/', name: 'GIN<br>RUMMY', keys: ['ginrummy'],
+      svg: '<rect x="10" y="8" width="22" height="30" rx="3" fill="#e9e8ff" transform="rotate(-10 21 23)"/><rect x="30" y="6" width="22" height="30" rx="3" fill="#f4f3ff" stroke="#14123a" transform="rotate(8 41 21)"/><text x="41" y="26" text-anchor="middle" font-size="16" fill="#b3123a" font-family="sans-serif" font-weight="bold" transform="rotate(8 41 21)">A</text>' }
+  ];
+  var grid = document.getElementById('grid');
+  GAMES.forEach(function (g) {
+    var best = null;
+    g.keys.forEach(function (k) {
+      var b = Scores.best(k);
+      if (b !== null && (best === null || b > best)) best = b;
+    });
+    var a = document.createElement('a');
+    a.className = 'tile live';
+    a.href = g.href;
+    a.innerHTML = '<svg width="64" height="44" viewBox="0 0 64 44" aria-hidden="true">' + g.svg + '</svg>' +
+      '<div class="name">' + g.name + '</div>' +
+      '<div class="tag' + (best !== null ? ' hi' : '') + '">' + (best !== null ? 'HI ' + best.toLocaleString() : 'PLAY') + '</div>';
+    grid.appendChild(a);
+  });
+  Auth.require();
+  document.getElementById('out').addEventListener('click', function () { Auth.signOut(); });
+</script>
 </body>
 </html>

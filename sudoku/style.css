@@ -1,0 +1,25 @@
+.marquee.compact{padding:0}
+.marquee.compact h1{font-size:16px;margin-top:6px}
+.su-screen{padding:8px;min-height:0;flex:0 0 auto}
+.su{display:grid;grid-template-columns:repeat(9,minmax(0,1fr));width:100%;aspect-ratio:1;border:2px solid var(--line)}
+.sc{position:relative;padding:0;margin:0;border:0;border-right:1px solid var(--edge);border-bottom:1px solid var(--edge);background:var(--tile);color:var(--ink);font-family:'Press Start 2P',monospace;font-size:clamp(13px,4.6vw,20px);display:flex;align-items:center;justify-content:center;touch-action:manipulation;-webkit-user-select:none;user-select:none;min-width:0}
+.sc.br{border-right:2px solid var(--line)}
+.sc.bb{border-bottom:2px solid var(--line)}
+.sc:nth-child(9n){border-right:0}
+.sc:nth-child(n+73){border-bottom:0}
+.sc.given{color:#fff}
+.sc.mine{color:var(--cyan)}
+.sc.peer{background:#1c1a50}
+.sc.same{background:#34329a}
+.sc.sel{background:#3c39b0;outline:3px solid var(--amber);outline-offset:-3px;z-index:2}
+.sc.bad{color:#ff7b8a}
+.sc.bad::after{content:"";position:absolute;inset:3px;border:2px solid #ff7b8a;border-radius:3px;pointer-events:none}
+.notes{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);width:100%;height:100%;font-family:ui-sans-serif,system-ui,sans-serif;font-size:clamp(7px,2.4vw,11px);color:var(--dim);line-height:1;text-align:center}
+.notes span{display:flex;align-items:center;justify-content:center}
+.pad9{display:grid;grid-template-columns:repeat(9,minmax(0,1fr));gap:4px}
+.pad9 button{min-height:50px;border-radius:8px;border:2px solid var(--line);background:var(--tile);color:var(--ink);font-family:'Press Start 2P',monospace;font-size:13px;padding:0;position:relative}
+.pad9 button:disabled{opacity:.35;cursor:default}
+.pad9 button small{position:absolute;right:3px;bottom:2px;font-size:6px;color:var(--mute);font-family:ui-sans-serif,system-ui,sans-serif}
+.tools{display:flex;gap:8px}
+.tools .btn{min-height:44px;font-size:8px;padding:0 4px}
+.tools .btn[aria-pressed="true"]{border-color:var(--cyan);color:var(--cyan)}
