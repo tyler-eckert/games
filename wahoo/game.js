@@ -302,7 +302,9 @@
   }
   function collectMoves(p) {
     var list = [], seen = {};
-    rolls.forEach(function (r, i) {
+    var order = rolls.map(function (r, i) { return i; }).sort(function (x, y) { return rolls[x] - rolls[y]; });
+    order.forEach(function (i) {   // lowest die first, so a 1 (not the more useful 6) is the one spent bringing a marble out
+      var r = rolls[i];
       if (used[i]) return;
       legalMoves(p.seat, r).forEach(function (mv) {
         var key = mv.m.seat + '-' + mv.m.id + '-' + mv.type + '-' + mv.to;
