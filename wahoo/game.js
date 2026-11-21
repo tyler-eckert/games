@@ -153,7 +153,10 @@
         if (!blocked) {
           var pts = [];
           for (q = p; q <= t; q++) pts.push(posXY(seat, q));
-          out.push({ m: m, type: 'move', from: p, to: t, cap: t < LAP ? occupantAt((SIDE * seat + t) % TRACK, seat) : null, pts: pts });
+          if (t === PORT && (r === 1 || r === 6) && !ownAt(seat, CENTER)) {   // landing on your port with a 1 or 6 drops you into the center
+            pts.push(CENTER_XY);
+            out.push({ m: m, type: 'center', from: p, to: CENTER, cap: centerOccupant(seat), pts: pts });
+          } else out.push({ m: m, type: 'move', from: p, to: t, cap: t < LAP ? occupantAt((SIDE * seat + t) % TRACK, seat) : null, pts: pts });
         }
       }
       if ((r === 1 || r === 6) && p === PORT) {
@@ -801,7 +804,7 @@
     'Roll a 1 or a 6 to bring a marble out onto your start hole. With two dice, play each die on any marble, in whichever order you like.',
     'Every die that shows a 1 or a 6 is rolled again, and only that die. Doubles roll both dice again.',
     'Never land on or pass your own marbles. Land exactly on another color to send it back. You need an exact count to settle into your home row.',
-    'Your port is the ringed hole 6 spaces past your start. A marble sitting on it can jump to the center with a 1 or a 6. It leaves the center only on a 1 and lands 8 spaces past the port.',
+    'Your port is the ringed hole 6 spaces past your start. Landing on it with a 1 or a 6 drops you into the center, and a marble already sitting on it can jump in with a 1 or a 6. It leaves the center only on a 1 and lands 8 spaces past the port.',
     'The first player to get all 4 marbles home wins. When more than one move is possible, tap a glowing marble to move it.'
   ];
   $('help').addEventListener('click', function () {
