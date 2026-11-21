@@ -5,14 +5,14 @@
   - Dice: one or two. After playing the dice, every die that showed a 1 or a 6 is rolled again (only those dice).
     Doubles roll both dice again. This repeats as long as it keeps happening.
   - Center shortcut: each player has a port 6 holes past their start hole. A marble sitting on its port rolls a 1 or a 6
-    to jump into the center. It leaves the center only on a 1 and lands 8 holes past the port (14 holes past the start).
+    to jump into the center. It leaves the center only on a 1 and lands 12 holes past the port (18 past the start).
   - Boards: up to 4 players use a square cross board (56-hole track); 5 or 6 players use a hexagon (42-hole track).
   - Online: players take turns on their own devices. Each device runs the same rules; the player whose turn it is
     sends their dice and move, and the host plays the computer seats. Empty seats become computers.
 */
 (function () {
   var GAME = 'wahoo';
-  var TRACK = 42, SIDE = 7, HOME0 = 42, HOME3 = 45, LAP = 42, PORT = 6, CENTER = 100, BASE = -1, EXIT_POS = 14, mode = 'hex';
+  var TRACK = 42, SIDE = 7, HOME0 = 42, HOME3 = 45, LAP = 42, PORT = 6, CENTER = 100, BASE = -1, EXIT_POS = 18, mode = 'hex';
   var W = 440, CX = 220, CY = 220, R = 150, U = 29, MR = 8;
   var HEX_COLORS = ['#ff4d5e', '#ffc83d', '#7dff6b', '#3ef0ff', '#4d6bff', '#e86bff'];
   var CROSS_COLORS = ['#ffc83d', '#ff4d5e', '#7dff6b', '#4d9bff'];
@@ -804,7 +804,7 @@
     'Roll a 1 or a 6 to bring a marble out onto your start hole. With two dice, play each die on any marble, in whichever order you like.',
     'Every die that shows a 1 or a 6 is rolled again, and only that die. Doubles roll both dice again.',
     'Never land on or pass your own marbles. Land exactly on another color to send it back. You need an exact count to settle into your home row.',
-    'Your port is the ringed hole 6 spaces past your start. Landing on it with a 1 or a 6 drops you into the center, and a marble already sitting on it can jump in with a 1 or a 6. It leaves the center only on a 1 and lands 8 spaces past the port.',
+    'Your port is the ringed hole 6 spaces past your start. Landing on it with a 1 or a 6 drops you into the center, and a marble already sitting on it can jump in with a 1 or a 6. It leaves the center only on a 1 and lands 12 spaces past the port.',
     'The first player to get all 4 marbles home wins. When more than one move is possible, tap a glowing marble to move it.'
   ];
   $('help').addEventListener('click', function () {
