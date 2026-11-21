@@ -387,13 +387,17 @@
     cx.lineWidth = 1.5; cx.strokeStyle = '#0b0a1f'; cx.stroke();
   }
   function frame(t) {
+    try { draw(t); } catch (e) { if (window.console) console.error(e); }
+    requestAnimationFrame(frame);
+  }
+  function draw(t) {
     cx.setTransform(dpr * scale, 0, 0, dpr * scale, 0, 0);
     cx.clearRect(0, 0, W, W);
     drawBoard();
     if (marbles) {
       var animating = {};
       anims = anims.filter(function (a) {
-        var el = (t - a.start) / a.seg, n = a.pts.length - 1;
+        var el = Math.max(0, (t - a.start) / a.seg), n = a.pts.length - 1;
         if (el >= n) { a.done(); return false; }
         var i = Math.floor(el), f = el - i;
         a.xy = { x: a.pts[i].x + (a.pts[i + 1].x - a.pts[i].x) * f, y: a.pts[i].y + (a.pts[i + 1].y - a.pts[i].y) * f };
@@ -417,7 +421,6 @@
         targets().forEach(function (tg) { ring(tg.xy.x, tg.xy.y, 12 + pulse * 3, '#ffc83d', 3); });
       }
     }
-    requestAnimationFrame(frame);
   }
   function sizeCanvas() {
     var avail = Math.min(cv.parentElement.clientWidth - 16 || 340, 420);
