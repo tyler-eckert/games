@@ -15,7 +15,7 @@
 
   var $ = function (id) { return document.getElementById(id); };
   var wheel = $('wheel'), wx = wheel.getContext('2d');
-  var dpr = window.devicePixelRatio || 1, SIZE = 220;
+  var dpr = window.devicePixelRatio || 1, SIZE = 196;
 
   var token = 0, puzzleNo, total, solvedCount, round, misses, phrase, cat, letters, used, hot, reveal;
   var state = 'idle', wedgeVal = 0, rot = 0, pool = [];

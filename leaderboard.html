@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=5, user-scalable=yes">
+  <meta name="theme-color" content="#0b0a1f">
+  <title>Leaderboard · Eckerthaus Arcade</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/arcade.css">
+  <script>document.documentElement.classList.add('auth-pending')</script>
+  <link rel="icon" type="image/svg+xml" href="/icons/icon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32.png">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Arcade">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <style>
+    .lb-sel{width:100%;min-height:48px;background:#14123a;color:var(--ink);border:2px solid var(--cyan);border-radius:8px;font:11px 'Press Start 2P',monospace;padding:0 12px}
+    .lb{display:flex;flex-direction:column;gap:6px;margin-top:12px}
+    .lb .r{display:grid;grid-template-columns:34px 1fr auto;gap:8px;align-items:center;min-height:44px;padding:0 12px;background:#14123a;border-radius:8px;font-size:10px}
+    .lb .r.mine{outline:2px solid var(--amber);color:var(--amber)}
+    .lb .r.first .rk{color:var(--amber)}
+    .lb .pl{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .lb .pl small{color:#8c8bd0;font-size:8px;margin-left:6px}
+    .lb .msg{font-size:10px;line-height:1.8;color:#8c8bd0;text-align:center;padding:24px 0}
+  </style>
+</head>
+<body>
+<main class="cab">
+  <header class="marquee" style="padding-top:18px">
+    <div class="sub">BEST PER PLAYER</div>
+    <h1 style="font-size:20px">LEADER-<br>BOARD</h1>
+  </header>
+  <section class="screen" style="justify-content:flex-start;min-height:0">
+    <label class="sr" for="game" style="position:absolute;left:-9999px">Game</label>
+    <select id="game" class="lb-sel"></select>
+    <div class="lb" id="lb" aria-live="polite"></div>
+  </section>
+  <div class="foot"><a class="linkbtn" href="/">BACK TO ARCADE</a></div>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/config.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/scores.js"></script>
+<script>
+  var LIST = [
+    ['codebreaker','Code-Breaker'],
+    ['minesweeper-easy','Minesweeper · Easy'],['minesweeper-medium','Minesweeper · Medium'],['minesweeper-hard','Minesweeper · Hard'],
+    ['blockfall','Blockfall'],
+    ['solitaire-draw1','Solitaire · Draw 1'],['solitaire-draw3','Solitaire · Draw 3'],
+    ['sudoku-easy','Sudoku · Easy'],['sudoku-medium','Sudoku · Medium'],['sudoku-hard','Sudoku · Hard'],['sudoku-daily','Sudoku · Daily'],
+    ['wheel','Spin & Solve'],['brickbounce','Brick Bounce'],['hangman','Hangman'],['wahoo','Wahoo'],['ginrummy','Gin Rummy']
+  ];
+  var sel = document.getElementById('game'), box = document.getElementById('lb');
+  LIST.forEach(function (g) { var o = document.createElement('option'); o.value = g[0]; o.textContent = g[1]; sel.appendChild(o); });
+  var q = new URLSearchParams(location.search).get('game');
+  if (q) sel.value = q;
+  function note(t) { box.textContent = ''; var d = document.createElement('div'); d.className = 'msg'; d.textContent = t; box.appendChild(d); }
+  function load() {
+    note('LOADING…');
+    var want = sel.value;
+    Scores.board(want, 10).then(function (rows) {
+      if (sel.value !== want) return;
+      if (!rows.length) { note('NO SCORES YET. BE THE FIRST!'); return; }
+      box.textContent = '';
+      rows.forEach(function (r, i) {
+        var d = document.createElement('div');
+        d.className = 'r' + (r.mine ? ' mine' : '') + (i === 0 ? ' first' : '');
+        var rk = document.createElement('span'); rk.className = 'rk'; rk.textContent = (i + 1) + '.';
+        var pl = document.createElement('span'); pl.className = 'pl'; pl.textContent = r.player;
+        var ini = document.createElement('small'); ini.textContent = r.initials; pl.appendChild(ini);
+        var sc = document.createElement('span'); sc.textContent = r.score.toLocaleString();
+        d.appendChild(rk); d.appendChild(pl); d.appendChild(sc);
+        box.appendChild(d);
+      });
+    }).catch(function () { note('COULD NOT LOAD SCORES. TRY AGAIN.'); });
+  }
+  sel.addEventListener('change', load);
+  Auth.require().then(function (s) { if (s) load(); });
+</script>
+</body>
+</html>
