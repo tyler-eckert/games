@@ -70,9 +70,9 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid var(-
 .btn.go{border:0;background:var(--amber);color:#0b0a1f}
 .btn:disabled{background:var(--edge);color:var(--mute);border:0;cursor:default}
 
-.overlay{position:fixed;inset:0;background:rgba(11,10,31,.92);display:flex;align-items:center;justify-content:center;padding:24px;z-index:10}
+.overlay{position:fixed;inset:0;background:rgba(11,10,31,.92);display:flex;align-items:flex-start;justify-content:center;padding:24px;z-index:10;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
 .overlay[hidden]{display:none}
-.panel{width:100%;max-width:380px;display:flex;flex-direction:column;align-items:center;gap:20px;text-align:center}
+.panel{margin:auto 0;width:100%;max-width:380px;display:flex;flex-direction:column;align-items:center;gap:20px;text-align:center}
 .panel h2{margin:0;font-size:20px;font-weight:400;line-height:1.4}
 .panel .line{font-size:10px;line-height:1.8}
 .panel .score{font-size:14px;color:var(--amber)}
