@@ -75,6 +75,9 @@
     playerName: playerName,
     /* Shared leaderboard: best score per login for one game key. Resolves to [{player, initials, score, mine}]. */
     board: function (g, n) {
+      if (!window.Auth || !Auth.client) {   // local build with no server: show this device's own scores
+        return Promise.resolve(read(g).slice(0, n || 10).map(function (r) { return { player: 'THIS DEVICE', initials: r.initials, score: r.score, mine: true }; }));
+      }
       var CK = 'arcade.board.' + g;
       function cached() { try { return JSON.parse(localStorage.getItem(CK)) || []; } catch (e) { return []; } }
       if (!navigator.onLine) return Promise.resolve(cached().slice(0, n || 10));

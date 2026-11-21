@@ -1,1 +1,6 @@
 _*.png
+_lan/
+android/.gradle/
+android/**/build/
+android/app/src/main/assets/www/
+android/local.properties

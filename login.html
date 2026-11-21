@@ -37,7 +37,8 @@
         </div>
         <div class="field">
           <label for="pw">PASSWORD</label>
-          <input id="pw" name="password" type="password" autocomplete="current-password" required>
+          <input id="pw" name="password" type="password" autocomplete="current-password" autocapitalize="none" autocorrect="off" spellcheck="false" required>
+          <button class="linkbtn" id="show" type="button" aria-pressed="false" style="align-self:flex-end;min-height:36px">SHOW PASSWORD</button>
         </div>
         <div class="err" id="err" role="alert"></div>
         <button class="big-btn" id="go" type="submit">SIGN IN</button>
@@ -60,11 +61,17 @@
     if (s) location.replace(next); else Auth.reveal();
   });
 
+  document.getElementById('show').addEventListener('click', function () {
+    var pw = document.getElementById('pw'), on = pw.type === 'password';
+    pw.type = on ? 'text' : 'password';
+    this.textContent = on ? 'HIDE PASSWORD' : 'SHOW PASSWORD';
+    this.setAttribute('aria-pressed', on ? 'true' : 'false');
+  });
   var f = document.getElementById('f'), err = document.getElementById('err'), go = document.getElementById('go');
   f.addEventListener('submit', function (e) {
     e.preventDefault();
     err.textContent = '';
-    var email = f.email.value.trim(), pw = f.password.value;
+    var email = f.email.value.trim(), pw = f.password.value.trim();
     if (!email || !pw) { err.textContent = 'ENTER YOUR EMAIL AND PASSWORD'; return; }
     if (!navigator.onLine) { err.textContent = 'YOU ARE OFFLINE. CONNECT ONCE TO SIGN IN.'; return; }
     go.disabled = true; go.textContent = 'SIGNING IN...';

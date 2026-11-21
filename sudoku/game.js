@@ -267,7 +267,7 @@
 
   function openRace() {
     if (race || HowTo.isOpen()) return;
-    if (!navigator.onLine) { roomGone('YOU ARE OFFLINE. RACES NEED A CONNECTION.'); return; }
+    if (!navigator.onLine || !Auth.client) { roomGone('YOU ARE OFFLINE. RACES NEED A CONNECTION.'); return; }
     var lv = level === 'daily' ? 'easy' : level;
     var panel = showOv();
     panel.appendChild(el('h2', '', 'SUDOKU RACE'));
