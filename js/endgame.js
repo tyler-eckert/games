@@ -31,7 +31,8 @@
       '<button class="big-btn" type="submit">SAVE</button>' +
       '</form>' +
       '<div class="table" id="table" hidden></div>' +
-      '<button class="big-btn" id="again" type="button">PLAY AGAIN</button>' +
+      '<div class="endbtns"><button class="big-btn" id="again" type="button">PLAY AGAIN</button>' +
+      '<a class="big-btn alt" id="lbLink" href="/leaderboard.html">LEADERBOARD</a></div>' +
       '</div>';
     document.body.appendChild(o);
 
@@ -42,10 +43,11 @@
     $('initials').addEventListener('submit', function (e) {
       e.preventDefault();
       var ini = $('ini').value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 3);
-      if (!ini || !cur) return;
+      if (!ini || !cur || cur.saved) return;
+      cur.saved = true;                       // one save per game, even on double taps
+      $('initials').hidden = true;
+      $('again').hidden = false;
       Scores.submit(cur.key, ini, cur.score).then(function () {
-        $('initials').hidden = true;
-        $('again').hidden = false;
         renderTable();
         $('again').focus();
       });
@@ -60,7 +62,7 @@
       list.forEach(function (s, i) {
         var d = el('div');
         d.appendChild(el('span', '', (i + 1) + '. ' + s.initials));
-        d.appendChild(el('span', '', s.score.toLocaleString()));
+        d.appendChild(el('span', '', Scores.fmt(cur.key, s.score)));
         t.appendChild(d);
       });
       t.hidden = false;
@@ -80,7 +82,9 @@
       title.style.color = o.color || '#7dff6b';
       title.style.textShadow = '0 0 14px ' + (o.color || '#7dff6b');
       $('over-line').textContent = o.line || '';
-      $('over-score').textContent = 'SCORE ' + o.score.toLocaleString();
+      $('over-score').textContent = (Scores.lower(o.key) ? 'TIME ' : 'SCORE ') + Scores.fmt(o.key, o.score);
+      $('lbLink').href = '/leaderboard.html?game=' + encodeURIComponent(o.key);
+      o.saved = false;
       var q = o.score > 0 && Scores.qualifies(o.key, o.score);
       $('ini').value = '';
       $('initials').hidden = !q;

@@ -26,6 +26,7 @@
   <div class="bar">
     <a class="menu" href="../">&lt; MENU</a>
     <div class="grow">
+      <button class="iconbtn" id="padmode" type="button" aria-label="Switch control layout">D</button>
       <button class="iconbtn" id="pause" type="button" aria-label="Pause">II</button>
       <button class="iconbtn" id="help" type="button" aria-label="How to play">?</button>
     </div>
@@ -46,13 +47,13 @@
     </aside>
   </section>
 
-  <div class="pad">
-    <button class="btn" id="b-left" type="button">LEFT</button>
-    <button class="btn" id="b-rot" type="button">ROTATE</button>
-    <button class="btn" id="b-right" type="button">RIGHT</button>
-    <button class="btn" id="b-hold" type="button">HOLD</button>
-    <button class="btn" id="b-down" type="button">DOWN</button>
-    <button class="btn go" id="b-drop" type="button">DROP</button>
+  <div class="pad dpad" id="pad">
+    <button class="btn" id="b-rot" type="button" aria-label="Rotate"><span class="w">ROTATE</span><span class="s">&#9650;</span></button>
+    <button class="btn" id="b-left" type="button" aria-label="Left"><span class="w">LEFT</span><span class="s">&#9664;</span></button>
+    <button class="btn" id="b-right" type="button" aria-label="Right"><span class="w">RIGHT</span><span class="s">&#9654;</span></button>
+    <button class="btn" id="b-down" type="button" aria-label="Down"><span class="w">DOWN</span><span class="s">&#9660;</span></button>
+    <button class="btn" id="b-hold" type="button" aria-label="Hold">HOLD</button>
+    <button class="btn go" id="b-drop" type="button" aria-label="Drop">DROP</button>
   </div>
 </main>
 

@@ -71,17 +71,17 @@
   ];
   var grid = document.getElementById('grid');
   GAMES.forEach(function (g) {
-    var best = null;
+    var best = null, bestKey = g.keys[0];
     g.keys.forEach(function (k) {
       var b = Scores.best(k);
-      if (b !== null && (best === null || b > best)) best = b;
+      if (b !== null && (best === null || Scores.better(k, b, best))) { best = b; bestKey = k; }
     });
     var a = document.createElement('a');
     a.className = 'tile live';
     a.href = g.href;
     a.innerHTML = '<svg width="64" height="44" viewBox="0 0 64 44" aria-hidden="true">' + g.svg + '</svg>' +
       '<div class="name">' + g.name + '</div>' +
-      '<div class="tag' + (best !== null ? ' hi' : '') + '">' + (best !== null ? 'HI ' + best.toLocaleString() : 'PLAY') + '</div>';
+      '<div class="tag' + (best !== null ? ' hi' : '') + '">' + (best !== null ? (Scores.lower(bestKey) ? 'BEST ' : 'HI ') + Scores.fmt(bestKey, best) : 'PLAY') + '</div>';
     grid.appendChild(a);
   });
   Auth.require();

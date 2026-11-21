@@ -6,5 +6,17 @@
 .side{width:68px;display:flex;flex-direction:column;gap:10px;font-size:8px;color:var(--dim)}
 .side canvas{margin-top:4px;width:64px}
 .stat b{display:block;font-weight:400;color:var(--ink);font-size:10px;margin-top:5px;word-break:break-all}
-.pad{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.pad{display:grid;gap:8px}
 .pad .btn{min-height:46px;font-size:9px;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.pad .s{display:none}
+/* classic: six labelled buttons */
+.pad.classic{grid-template-columns:repeat(3,1fr)}
+.pad.classic #b-left{order:1}.pad.classic #b-rot{order:2}.pad.classic #b-right{order:3}
+.pad.classic #b-hold{order:4}.pad.classic #b-down{order:5}.pad.classic #b-drop{order:6}
+/* D-pad: cross on the left, HOLD and DROP on the right */
+.pad.dpad{grid-template-columns:1fr 1fr 1fr .35fr 1.4fr;grid-template-rows:repeat(3,44px);
+  grid-template-areas:". rot . . hold" "left . right . drop" ". down . . drop"}
+.pad.dpad #b-rot{grid-area:rot}.pad.dpad #b-left{grid-area:left}.pad.dpad #b-right{grid-area:right}
+.pad.dpad #b-down{grid-area:down}.pad.dpad #b-hold{grid-area:hold}.pad.dpad #b-drop{grid-area:drop;font-size:11px}
+.pad.dpad .w{display:none}.pad.dpad .s{display:inline;font-size:16px}
+.pad.dpad .btn{min-height:0;padding:0}

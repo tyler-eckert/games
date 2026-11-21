@@ -262,6 +262,19 @@
   holdBtn('b-hold', doHold);
   holdBtn('b-drop', hardDrop);
 
+  /* control layout: D-pad by default, classic six buttons optional */
+  var padEl = $('pad'), padBtn = $('padmode');
+  function setPad(mode) {
+    padEl.className = 'pad ' + mode;
+    padBtn.textContent = mode === 'dpad' ? 'D' : '6';
+    padBtn.setAttribute('aria-label', mode === 'dpad' ? 'Control layout: D-pad. Switch to six buttons' : 'Control layout: six buttons. Switch to D-pad');
+    try { localStorage.setItem('arcade.blockfall.pad', mode); } catch (e) {}
+  }
+  var savedPad = 'dpad';
+  try { savedPad = localStorage.getItem('arcade.blockfall.pad') === 'classic' ? 'classic' : 'dpad'; } catch (e) {}
+  setPad(savedPad);
+  padBtn.addEventListener('click', function () { setPad(padEl.classList.contains('dpad') ? 'classic' : 'dpad'); });
+
   function togglePause() {
     if (state !== 'play' || Endgame.isOpen()) return;
     if (HowTo.isOpen()) HowTo.close();
@@ -271,7 +284,7 @@
 
   var HELP = [
     'Blocks fall from the top. Slide and rotate them to build solid rows with no gaps. A full row clears and scores points.',
-    'LEFT, RIGHT and ROTATE steer the piece. Hold DOWN to fall faster. DROP slams it to the bottom. HOLD saves a piece for later (once per piece).',
+    'Use the D-pad: left and right slide the piece, the up arrow rotates it, and holding the down arrow falls faster. DROP slams it to the bottom. HOLD saves a piece for later (once per piece). The D button up top switches to six labelled buttons.',
     'The outline at the bottom shows where the piece will land. NEXT shows what is coming.',
     'The game speeds up every 10 rows. It ends when the stack reaches the top. On a keyboard: arrows, Space to drop, C to hold, P to pause.'
   ];

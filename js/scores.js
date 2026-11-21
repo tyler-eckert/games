@@ -2,6 +2,13 @@
    posted to the shared leaderboard in Supabase (table public.arcade_scores) under the signed-in login. */
 (function () {
   var KEY = function (g) { return 'arcade.scores.' + g; };
+  /* Sudoku scores are solve times in seconds, so lower is better; everything else is points. */
+  function lower(g) { return /^sudoku-/.test(g); }
+  function better(g, a, b) { return lower(g) ? a < b : a > b; }
+  function fmt(g, v) {
+    if (lower(g)) { var m = Math.floor(v / 60), s = v % 60; return m + ':' + (s < 10 ? '0' : '') + s; }
+    return Number(v).toLocaleString();
+  }
   function read(g) {
     try { return JSON.parse(localStorage.getItem(KEY(g))) || []; } catch (e) { return []; }
   }
@@ -22,14 +29,15 @@
   window.Scores = {
     top: function (g, n) { return Promise.resolve(read(g).slice(0, n || 5)); },
     best: function (g) { var l = read(g); return l.length ? l[0].score : null; },
+    lower: lower, fmt: fmt, better: better,
     qualifies: function (g, score) {
       var l = read(g);
-      return score > 0 && (l.length < 10 || score > l[l.length - 1].score);
+      return score > 0 && (l.length < 10 || better(g, score, l[l.length - 1].score));
     },
     submit: function (g, initials, score) {
       var l = read(g);
       l.push({ initials: initials, score: score, at: Date.now() });
-      l.sort(function (a, b) { return b.score - a.score; });
+      l.sort(function (a, b) { return lower(g) ? a.score - b.score : b.score - a.score; });
       try { localStorage.setItem(KEY(g), JSON.stringify(l.slice(0, 10))); } catch (e) {}
       return remoteSubmit(g, initials, score);
     },
@@ -40,7 +48,7 @@
         var me = s && s.user && s.user.id;
         return Auth.client.from('arcade_scores')
           .select('user_id,player,initials,score,created_at')
-          .eq('game', g).order('score', { ascending: false }).limit(300)
+          .eq('game', g).order('score', { ascending: lower(g) }).limit(300)
           .then(function (r) {
             if (r.error) throw r.error;
             var seen = {}, out = [];

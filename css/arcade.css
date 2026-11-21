@@ -12,7 +12,7 @@ a{color:inherit;text-decoration:none}
 button{font-family:inherit;cursor:pointer}
 button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
 
-.cab{width:100%;max-width:430px;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;gap:10px;padding:10px 16px 18px;position:relative}
+.cab{width:100%;max-width:430px;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;gap:8px;padding:calc(22px + env(safe-area-inset-top)) 16px calc(64px + env(safe-area-inset-bottom));position:relative}
 .bar{display:flex;align-items:center;justify-content:space-between;min-height:44px;font-size:10px}
 .menu{color:var(--pink);display:flex;align-items:center;min-height:44px;padding-right:16px}
 .menu:hover{color:#fff}
@@ -24,7 +24,7 @@ button:focus-visible,a:focus-visible,input:focus-visible{outline:3px solid var(-
 .blink{animation:blink 1.1s steps(1) infinite}
 @media (prefers-reduced-motion:reduce){.blink{animation:none}}
 
-.screen{position:relative;flex:1;min-height:420px;border:3px solid var(--edge);border-radius:14px;background:var(--panel);
+.screen{position:relative;flex:1;min-height:0;border:3px solid var(--edge);border-radius:14px;background:var(--panel);
   box-shadow:0 0 24px rgba(62,240,255,.12),inset 0 0 30px rgba(0,0,0,.6);padding:10px;display:flex;flex-direction:column;justify-content:space-between}
 .screen::after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:11px;
   background:repeating-linear-gradient(to bottom,rgba(255,255,255,.04) 0,rgba(255,255,255,.04) 1px,transparent 1px,transparent 3px)}
@@ -113,3 +113,7 @@ a.linkbtn{display:inline-flex;align-items:center;text-decoration:none;font-famil
 .seg{display:flex;gap:8px}
 .lv{flex:1;min-height:44px;border-radius:8px;border:2px solid var(--line);background:var(--tile);color:var(--dim);font-size:8px}
 .lv.on{border-color:var(--cyan);color:var(--cyan);box-shadow:0 0 8px rgba(62,240,255,.35)}
+
+.endbtns{display:flex;flex-direction:column;gap:8px;width:100%}
+.endbtns .big-btn{width:100%;display:flex;align-items:center;justify-content:center;text-align:center}
+.big-btn.alt{background:transparent;color:var(--cyan);border:2px solid var(--cyan);box-shadow:none}

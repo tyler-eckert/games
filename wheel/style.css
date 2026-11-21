@@ -4,7 +4,7 @@
 .cat{text-align:center;font-size:12px;line-height:1.5;color:#14123a;background:var(--amber);border-radius:6px;padding:7px 8px;font-weight:700;min-height:1.5em}
 .board{display:flex;flex-direction:column;gap:4px;align-items:center;min-height:92px;justify-content:center;background:#0a2a1c;border:2px solid #14583a;border-radius:8px;padding:8px 4px}
 .brow{display:flex;gap:4px;justify-content:center}
-.tile,.gap{width:min(25px,calc((min(100vw,430px) - 80px) / 13));height:26px;flex:none}
+.tile,.gap{width:min(25px,calc((min(100vw,430px) - 80px) / 13));aspect-ratio:1/1;flex:none}
 .tile{display:flex;align-items:center;justify-content:center;background:transparent;border-bottom:3px solid #f4f3ff;color:#f4f3ff;font-size:14px;padding-top:2px}
 .tile.hot{color:var(--amber);border-bottom-color:var(--amber)}
 .tile.miss{color:#ff6b86;border-bottom-color:#ff6b86}
@@ -15,7 +15,7 @@
 .wheel-wrap canvas{display:block}
 .msg{min-height:2.6em;text-align:center;font-size:9px;line-height:1.6;color:var(--ink)}
 .keys{display:grid;grid-template-columns:repeat(9,minmax(0,1fr));gap:4px}
-.keys button{min-height:40px;border-radius:6px;border:2px solid var(--line);background:var(--tile);color:var(--ink);font-family:'Press Start 2P',monospace;font-size:11px;padding:0}
+.keys button{aspect-ratio:1/1;min-height:0;border-radius:6px;border:2px solid var(--line);background:var(--tile);color:var(--ink);font-family:'Press Start 2P',monospace;font-size:11px;padding:0}
 .keys button.v{border-color:var(--pink)}
 .keys button:disabled{opacity:.28;cursor:default}
 .keys button.hit{background:#1d5a38;border-color:var(--green)}
