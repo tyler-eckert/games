@@ -1,5 +1,14 @@
 /* Email + password sign-in only. No magic links, no password reset, no sign-up UI. */
 (function () {
+  /* Build stamp shown at the bottom of every page. Bump `n` (and the date) with each push so a new build is easy to spot. */
+  var BUILD = { n: 1, date: 'Nov 22' };
+  function stamp() {
+    if (document.getElementById('build-stamp') || !document.body) return;
+    var s = document.createElement('div'); s.id = 'build-stamp'; s.textContent = 'BUILD ' + BUILD.n + ' \u00b7 ' + BUILD.date.toUpperCase();
+    s.style.cssText = 'position:fixed;left:0;right:0;bottom:calc(6px + env(safe-area-inset-bottom));text-align:center;font:7px "Press Start 2P",monospace;color:#9c9bd6;opacity:.7;pointer-events:none;z-index:1;letter-spacing:1px';
+    document.body.appendChild(s);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', stamp); else stamp();
   var cfg = window.ARCADE_CONFIG;
   var client = window.supabase.createClient(cfg.url, cfg.key, {
     auth: { persistSession: true, autoRefreshToken: true }
