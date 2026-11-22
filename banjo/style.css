@@ -1,0 +1,30 @@
+.setup{display:flex;flex-direction:column;gap:14px;padding:6px;align-items:stretch}
+.setup .q{font-size:9px;color:var(--pink);line-height:1.6}
+.setup .seg{width:100%}
+.setup .note{font-size:8px;line-height:1.8;color:var(--mute)}
+.bj-caller{display:flex;align-items:center;gap:12px;justify-content:center;min-height:84px}
+.ball{width:76px;height:76px;border-radius:50%;background:#fff;color:#0b0a1f;display:flex;flex-direction:column;align-items:center;justify-content:center;border:6px solid var(--c,#3ef0ff);flex:none}
+.ball b{font-weight:400;font-size:11px;line-height:1}
+.ball span{font-size:24px;line-height:1.2}
+.recent{display:flex;gap:6px;flex-wrap:wrap;max-width:200px}
+.recent i{font-style:normal;font-size:9px;padding:6px 7px;border:2px solid var(--c);border-radius:6px;color:var(--c)}
+.cnt{font-size:8px;color:var(--mute);margin-top:4px}
+.cboard{display:grid;grid-template-columns:14px repeat(15,1fr);gap:2px;width:100%;margin:6px 0}
+.cboard i{font-style:normal;font-size:7px;text-align:center;padding:4px 0;border-radius:3px;background:#14123a;color:#5d5c98}
+.cboard i.h{background:none;color:var(--c);font-size:9px}
+.cboard i.on{background:var(--c);color:#0b0a1f}
+.card{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;width:100%}
+.card .hd{font-size:20px;text-align:center;padding:6px 0;color:var(--c)}
+.card button{aspect-ratio:1;font-family:inherit;font-size:16px;border:2px solid var(--line);border-radius:8px;background:var(--tile);color:var(--ink);padding:0;position:relative;min-width:0}
+.card button.mk{background:var(--c);color:#0b0a1f;border-color:var(--c)}
+.card button.free{background:#14123a;border-color:var(--amber)}
+.card button.free svg{width:90%;height:90%}
+.card button.win{outline:3px solid #fff;outline-offset:-3px}
+.card.shake{animation:shk .3s}
+.bj-msg{font-size:10px;line-height:1.8;text-align:center;min-height:36px;color:var(--cyan)}
+.claim{font-family:inherit;font-size:16px;padding:16px;border-radius:12px;border:3px solid var(--amber);background:#3a2f0a;color:var(--amber);width:100%;min-height:60px}
+.claim.glow{background:var(--amber);color:#0b0a1f;animation:pulse 0.8s steps(2) infinite}
+@keyframes pulse{50%{box-shadow:0 0 18px var(--amber)}}
+@media (prefers-reduced-motion:reduce){.claim.glow{animation:none}}
+.others{font-size:8px;color:var(--mute);text-align:center;line-height:1.8}
+.cd{position:fixed;inset:0;background:rgba(11,10,31,.9);display:flex;align-items:center;justify-content:center;font-size:72px;color:var(--amber);z-index:9}

@@ -235,9 +235,51 @@
     } catch (e) { return false; }
   };
 
+  /* access: these logins may open Kids; only the editors may change spelling words and family questions.
+     The same rules are enforced in the database (table public.kids_content, row level security). */
+  var ALLOW = ['c07d695d-b2b8-4cf4-8b9c-3740e6b397d0', '474dbbe0-1c6c-4629-873b-83ec3dfa7a50', 'c93b19a4-f39c-49b5-b52b-fda6df8e08c9', 'ed0fffa8-a785-4025-a774-371b0955ce48'];
+  var EDIT = ['c93b19a4-f39c-49b5-b52b-fda6df8e08c9', 'ed0fffa8-a785-4025-a774-371b0955ce48'];
+  K.uid = null;
+  K.canEdit = function () { return EDIT.indexOf(K.uid) > -1; };
+  K.content = { family: null, spelling: null };
+  var CK = 'arcade.kids.content';
+  K.loadContent = function () {
+    function cached() { try { var c = JSON.parse(localStorage.getItem(CK)); if (c && c.uid === K.uid) K.content = c.content; } catch (e) {} }
+    if (!window.Auth || !Auth.client || !navigator.onLine) { cached(); return Promise.resolve(); }
+    return Auth.client.from('kids_content').select('key,data').then(function (r) {
+      if (r.error) throw r.error;
+      var c = { family: null, spelling: null };
+      (r.data || []).forEach(function (row) { c[row.key] = row.data; });
+      K.content = c;
+      try { localStorage.setItem(CK, JSON.stringify({ uid: K.uid, content: c })); } catch (e) {}
+    }).catch(cached);
+  };
+  K.saveContent = function (key, data) {
+    if (!K.canEdit()) return Promise.resolve({ error: { message: 'Only parents can change this.' } });
+    return Auth.client.from('kids_content').upsert({ key: key, data: data, updated_at: new Date().toISOString(), updated_by: K.uid }).then(function (r) {
+      if (!r.error) {
+        K.content[key] = data;
+        try { localStorage.setItem(CK, JSON.stringify({ uid: K.uid, content: K.content })); } catch (e) {}
+      }
+      return r;
+    });
+  };
+  K.denied = function () {
+    K.root.textContent = '';
+    K.root.appendChild(K.h('h1', 'ktitle', 'KIDS'));
+    K.root.appendChild(K.h('p', 'ksub', 'This part of the arcade is not turned on for this login.'));
+    var a = K.h('a', 'kbtn', 'BACK TO ARCADE'); a.href = '../'; a.style.textAlign = 'center';
+    K.root.appendChild(a);
+  };
+
   window.addEventListener('DOMContentLoaded', function () {
     K.root = document.getElementById('app');
-    if (window.Auth && Auth.require) Auth.require();
-    K.home();
+    if (!window.Auth || !Auth.require) { K.home(); return; }   // local build with no sign-in
+    Auth.require().then(function (s) {
+      if (!s) return;
+      K.uid = s.user && s.user.id;
+      if (ALLOW.indexOf(K.uid) < 0) return K.denied();
+      return K.loadContent().then(K.home);
+    });
   });
 })();

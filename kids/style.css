@@ -83,3 +83,8 @@
 .kpal{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
 .kpal button{font-family:inherit;font-size:24px;width:48px;height:52px;border-radius:8px;border:2px solid var(--green);background:var(--tile);color:var(--ink);padding:0}
 .kpal button.er{font-size:10px;width:auto;padding:0 10px;border-color:#ff7b8a;color:#ff7b8a}
+.kmapwrap{width:100%}
+.kst{fill:#2b2a5c;stroke:#0b0a1f;stroke-width:1.5;cursor:pointer}
+.kst:hover{fill:#3a38a0}
+.kst.right{fill:#7dff6b}
+.kst.wrong{fill:#ff7b8a}

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=5, user-scalable=yes">
+  <meta name="theme-color" content="#0b0a1f">
+  <title>Banjo · Eckerthaus Arcade</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/arcade.css">
+  <link rel="stylesheet" href="../wahoo/style.css">
+  <link rel="stylesheet" href="style.css">
+  <script>document.documentElement.classList.add('auth-pending')</script>
+  <link rel="icon" type="image/svg+xml" href="/icons/icon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32.png">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Arcade">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+</head>
+<body>
+<main class="cab">
+  <div class="bar">
+    <a class="menu" href="../">&lt; MENU</a>
+    <div class="grow"><button class="iconbtn" id="help" type="button" aria-label="How to play">?</button></div>
+  </div>
+  <header class="marquee compact">
+    <div class="sub">ECKERTHAUS ARCADE</div>
+    <h1>BANJO</h1>
+  </header>
+
+  <section class="screen wa-screen" id="setup">
+    <div class="setup">
+      <div class="q">COMPUTER PLAYERS</div>
+      <div class="seg" id="cpus">
+        <button class="lv" type="button" data-n="1">1</button>
+        <button class="lv on" type="button" data-n="2">2</button>
+        <button class="lv" type="button" data-n="3">3</button>
+      </div>
+      <div class="q">CALLING SPEED</div>
+      <div class="seg" id="speed">
+        <button class="lv" type="button" data-n="6000">SLOW</button>
+        <button class="lv on" type="button" data-n="4000">NORMAL</button>
+        <button class="lv" type="button" data-n="2500">FAST</button>
+      </div>
+      <div class="q">AUTO-DAUB</div>
+      <div class="seg" id="auto">
+        <button class="lv on" type="button" data-n="1">ON</button>
+        <button class="lv" type="button" data-n="0">OFF</button>
+      </div>
+      <div class="note">AUTO-DAUB MARKS YOUR NUMBERS FOR YOU. TURN IT OFF TO TAP THEM YOURSELF.</div>
+      <button class="big-btn" id="start" type="button">START GAME</button>
+      <button class="big-btn alt" id="online" type="button">PLAY ONLINE</button>
+    </div>
+  </section>
+
+  <div id="game" hidden>
+    <section class="screen wa-screen" style="flex-direction:column;align-items:stretch;gap:6px">
+      <div class="bj-caller"><div class="ball" id="ball" aria-live="polite"><b>-</b><span>-</span></div><div><div class="recent" id="recent"></div><div class="cnt" id="cnt"></div></div></div>
+      <div class="cboard" id="cboard" aria-label="Numbers called so far"></div>
+    </section>
+    <section class="screen wa-screen" style="flex-direction:column;align-items:stretch">
+      <div class="card" id="card"></div>
+    </section>
+    <div class="bj-msg" id="msg" role="status" aria-live="polite"></div>
+    <button class="claim" id="claim" type="button">BANJO!</button>
+    <div class="others" id="others"></div>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/config.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/scores.js"></script>
+<script src="../js/howto.js"></script>
+<script src="../js/endgame.js"></script>
+<script src="game.js"></script>
+</body>
+</html>

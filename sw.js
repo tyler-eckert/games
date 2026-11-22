@@ -5,6 +5,10 @@
 var CACHE = 'arcade-offline-v1';
 var APP = [
  "/",
+ "/banjo/",
+ "/banjo/game.js",
+ "/banjo/index.html",
+ "/banjo/style.css",
  "/blockfall/",
  "/blockfall/game.js",
  "/blockfall/index.html",
@@ -47,6 +51,7 @@ var APP = [
  "/kids/math.js",
  "/kids/sci.js",
  "/kids/style.css",
+ "/kids/usmap.js",
  "/kids/sudoku4.js",
  "/leaderboard.html",
  "/login.html",

@@ -13,6 +13,7 @@
   <style>
     .tile{min-height:104px;padding:12px 6px;gap:10px}
     .tile .name{font-size:9px}
+    .tile[hidden]{display:none}
     .tile.live{border:2px solid var(--cyan)}
     .tile .tag{font-size:8px;color:var(--green)}
     .tile .tag.hi{color:var(--amber)}
@@ -48,8 +49,6 @@
 <script src="js/scores.js"></script>
 <script>
   var GAMES = [
-    { href: 'kids/', name: 'KIDS', keys: [],
-      svg: '<rect x="6" y="8" width="16" height="16" rx="3" fill="#ff7be8"/><rect x="24" y="8" width="16" height="16" rx="3" fill="#3ef0ff"/><rect x="42" y="8" width="16" height="16" rx="3" fill="#ffc83d"/><text x="14" y="21" text-anchor="middle" font-size="12" fill="#0b0a1f" font-family="monospace">A</text><text x="32" y="21" text-anchor="middle" font-size="12" fill="#0b0a1f" font-family="monospace">1</text><text x="50" y="21" text-anchor="middle" font-size="12" fill="#0b0a1f" font-family="monospace">+</text><rect x="14" y="28" width="36" height="6" rx="2" fill="#7dff6b"/>' },
     { href: 'codebreaker/', name: 'CODE-<br>BREAKER', keys: ['codebreaker'],
       svg: '<circle cx="9" cy="12" r="7" fill="#ff4d5e"/><circle cx="25" cy="12" r="7" fill="#ffc83d"/><circle cx="41" cy="12" r="7" fill="#3ef0ff"/><circle cx="57" cy="12" r="7" fill="#e86bff"/><circle cx="12" cy="31" r="3" fill="#ffc83d"/><circle cx="24" cy="31" r="3" fill="none" stroke="#3ef0ff" stroke-width="2"/>' },
     { href: 'minesweeper/', name: 'MINE-<br>SWEEPER', keys: ['minesweeper-easy', 'minesweeper-medium', 'minesweeper-hard'],
@@ -69,9 +68,15 @@
     { href: 'wahoo/', name: 'WAHOO', keys: ['wahoo'],
       svg: '<polygon points="32,3 53,13 53,31 32,41 11,31 11,13" fill="#14123a" stroke="#7a79bb" stroke-width="2"/><circle cx="32" cy="3" r="3" fill="#ff4d5e"/><circle cx="53" cy="13" r="3" fill="#ffc83d"/><circle cx="53" cy="31" r="3" fill="#7dff6b"/><circle cx="32" cy="41" r="3" fill="#3ef0ff"/><circle cx="11" cy="31" r="3" fill="#4d6bff"/><circle cx="11" cy="13" r="3" fill="#e86bff"/><circle cx="32" cy="22" r="4" fill="none" stroke="#ffc83d" stroke-width="2"/>' },
     { href: 'ginrummy/', name: 'GIN<br>RUMMY', keys: ['ginrummy'],
-      svg: '<rect x="10" y="8" width="22" height="30" rx="3" fill="#e9e8ff" transform="rotate(-10 21 23)"/><rect x="30" y="6" width="22" height="30" rx="3" fill="#f4f3ff" stroke="#14123a" transform="rotate(8 41 21)"/><text x="41" y="26" text-anchor="middle" font-size="16" fill="#b3123a" font-family="sans-serif" font-weight="bold" transform="rotate(8 41 21)">A</text>' }
+      svg: '<rect x="10" y="8" width="22" height="30" rx="3" fill="#e9e8ff" transform="rotate(-10 21 23)"/><rect x="30" y="6" width="22" height="30" rx="3" fill="#f4f3ff" stroke="#14123a" transform="rotate(8 41 21)"/><text x="41" y="26" text-anchor="middle" font-size="16" fill="#b3123a" font-family="sans-serif" font-weight="bold" transform="rotate(8 41 21)">A</text>' },
+    { href: 'banjo/', name: 'BANJO', keys: ['banjo'],
+      svg: '<g transform="translate(14 -2) scale(.7)"><ellipse cx="13" cy="32" rx="9" ry="16" fill="#e2c88c" stroke="#b79556" stroke-width="2" transform="rotate(12 13 32)"/><ellipse cx="51" cy="32" rx="9" ry="16" fill="#e2c88c" stroke="#b79556" stroke-width="2" transform="rotate(-12 51 32)"/><ellipse cx="32" cy="32" rx="18" ry="19" fill="#fbf5e6" stroke="#d9c48e" stroke-width="2"/><path d="M24 15 Q28 20 32 15 Q36 20 40 15" fill="none" stroke="#efe2bf" stroke-width="2"/><ellipse cx="32" cy="42" rx="11" ry="8.5" fill="#fffaf0"/><circle cx="25" cy="30" r="2.8" fill="#2a1b12"/><circle cx="39" cy="30" r="2.8" fill="#2a1b12"/><circle cx="26" cy="29" r="0.9" fill="#fff"/><circle cx="40" cy="29" r="0.9" fill="#fff"/><ellipse cx="32" cy="38" rx="4" ry="2.8" fill="#1a1210"/><path d="M32 40.5 V44 M32 44 Q28 47.5 24.5 44.5 M32 44 Q36 47.5 39.5 44.5" fill="none" stroke="#5a3b2a" stroke-width="1.6" stroke-linecap="round"/><path d="M29 46 Q32 54 35 46 Z" fill="#ff8aa5"/></g>' },
+    { href: 'kids/', name: 'KIDS', keys: [],
+      svg: '<rect x="6" y="8" width="16" height="16" rx="3" fill="#ff7be8"/><rect x="24" y="8" width="16" height="16" rx="3" fill="#3ef0ff"/><rect x="42" y="8" width="16" height="16" rx="3" fill="#ffc83d"/><text x="14" y="21" text-anchor="middle" font-size="12" fill="#0b0a1f" font-family="monospace">A</text><text x="32" y="21" text-anchor="middle" font-size="12" fill="#0b0a1f" font-family="monospace">1</text><text x="50" y="21" text-anchor="middle" font-size="12" fill="#0b0a1f" font-family="monospace">+</text><rect x="14" y="28" width="36" height="6" rx="2" fill="#7dff6b"/>' }
   ];
   var grid = document.getElementById('grid');
+  var KIDS_OK = ['c07d695d-b2b8-4cf4-8b9c-3740e6b397d0', '474dbbe0-1c6c-4629-873b-83ec3dfa7a50', 'c93b19a4-f39c-49b5-b52b-fda6df8e08c9', 'ed0fffa8-a785-4025-a774-371b0955ce48'];
+  var kidsTile = null;
   GAMES.forEach(function (g) {
     var best = null, bestKey = g.keys[0];
     g.keys.forEach(function (k) {
@@ -84,11 +89,12 @@
     a.innerHTML = '<svg width="64" height="44" viewBox="0 0 64 44" aria-hidden="true">' + g.svg + '</svg>' +
       '<div class="name">' + g.name + '</div>' +
       '<div class="tag' + (best !== null ? ' hi' : '') + '">' + (best !== null ? (Scores.lower(bestKey) ? 'BEST ' : 'HI ') + Scores.fmt(bestKey, best) : 'PLAY') + '</div>';
+    if (g.href === 'kids/') { a.hidden = true; kidsTile = a; }
     grid.appendChild(a);
   });
   function paintNet() { document.getElementById('coin').textContent = navigator.onLine ? 'INSERT COIN' : 'OFFLINE MODE'; }
   window.addEventListener('online', paintNet); window.addEventListener('offline', paintNet); paintNet();
-  Auth.require();
+  Auth.require().then(function (s) { if (s && s.user && KIDS_OK.indexOf(s.user.id) > -1 && kidsTile) kidsTile.hidden = false; });
   document.getElementById('out').addEventListener('click', function () { Auth.signOut(); });
 </script>
 </body>

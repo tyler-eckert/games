@@ -17,11 +17,19 @@
     if (lower(g)) l = l.filter(function (r) { return r.at && r.at >= SUDOKU_TIMES_SINCE; });
     return l;
   }
-  function playerName(session) {
-    var email = session && session.user && session.user.email || '';
-    var n = email.split('@')[0].replace(/[^A-Za-z0-9._-]/g, '').slice(0, 20);
-    return n ? n.charAt(0).toUpperCase() + n.slice(1) : 'Player';
+  /* Friendly names for the family logins (email prefix after the dot). Also fixes names already saved in the database. */
+  var NICE = { ivy: 'Ivy', ollie: 'Ollie', jessie: 'Mom', tyler: 'Dad', trevor: 'Uncle Bubba' };
+  function nice(s) {
+    s = String(s || '');
+    if (s.indexOf('.') < 0 && s.indexOf('@') < 0) return s || 'Player';
+    var k = s.toLowerCase().split('@')[0].split('.').pop().replace(/[^a-z0-9]/g, '');
+    if (NICE[k]) return NICE[k];
+    return k ? k.charAt(0).toUpperCase() + k.slice(1, 20) : 'Player';
   }
+  function playerName(session) {
+    return nice(session && session.user && session.user.email || '');
+  }
+  function nicify(list) { return list.map(function (r) { r.player = nice(r.player); return r; }); }
   /* Scores saved while offline wait in a queue on this device and are sent to the shared leaderboard when you reconnect. */
   var QKEY = 'arcade.queue';
   function queue() { try { return JSON.parse(localStorage.getItem(QKEY)) || []; } catch (e) { return []; } }
@@ -77,7 +85,7 @@
       try { localStorage.setItem(KEY(g), JSON.stringify(l.slice(0, 10))); } catch (e) {}
       return remoteSubmit(g, initials, score);
     },
-    playerName: playerName,
+    playerName: playerName, nice: nice,
     /* Shared leaderboard: best score per login for one game key. Resolves to [{player, initials, score, mine}]. */
     board: function (g, n) {
       if (!window.Auth || !Auth.client) {   // local build with no server: show this device's own scores
@@ -85,7 +93,7 @@
       }
       var CK = 'arcade.board2.' + g;
       function cached() { try { return JSON.parse(localStorage.getItem(CK)) || []; } catch (e) { return []; } }
-      if (!navigator.onLine) return Promise.resolve(cached().slice(0, n || 10));
+      if (!navigator.onLine) return Promise.resolve(nicify(cached()).slice(0, n || 10));
       return Auth.session().then(function (s) {
         var me = s && s.user && s.user.id;
         return Auth.client.from('arcade_scores')
@@ -101,9 +109,9 @@
               out.push({ player: row.player, initials: row.initials, score: row.score, mine: row.user_id === me });
             });
             try { localStorage.setItem(CK, JSON.stringify(out.slice(0, 50))); } catch (e) {}
-            return out.slice(0, n || 10);
+            return nicify(out).slice(0, n || 10);
           });
-      }).catch(function () { return cached().slice(0, n || 10); });
+      }).catch(function () { return nicify(cached()).slice(0, n || 10); });
     }
   };
 })();

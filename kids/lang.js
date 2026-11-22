@@ -53,23 +53,23 @@
     2: ['because', 'people', 'before', 'again', 'always', 'around', 'would', 'could', 'enough', 'family', 'animal', 'together', 'garden', 'morning', 'favorite', 'house'],
     3: ['different', 'special', 'beautiful', 'thought', 'through', 'important', 'surprise', 'library', 'answer', 'country', 'probably', 'exercise', 'February', 'neighbor', 'science', 'picture']
   };
-  var MK = 'arcade.kids.spell';
-  function myList() { try { return JSON.parse(localStorage.getItem(MK)) || []; } catch (e) { return []; } }
+  function myList() { var d = K.content.spelling; return d && d.words ? d.words : []; }
   K.reg({ id: 'spell', subject: 'read', title: 'SPELLING BEE', desc: 'Hear it, spell it. Add your own list', emoji: '🐝', run: function (box, ctx) {
     var mine = myList(), opts = [{ label: 'GRADE 1', sub: 'Sight words', value: 1 }, { label: 'GRADE 2', sub: 'Everyday words', value: 2 }, { label: 'GRADE 3', sub: 'Tricky words', value: 3 }];
     if (mine.length) opts.push({ label: 'MY LIST', sub: mine.length + ' words from school', value: 'mine' });
     K.levels(box, opts, play);
-    var ed = K.btn('EDIT MY SPELLING LIST', '', edit); box.appendChild(ed);
+    if (K.canEdit()) box.appendChild(K.btn('EDIT MY SPELLING LIST', '', edit));
     function edit() {
       box.textContent = '';
-      box.appendChild(h('p', 'ksub', 'One word per line, or separate with commas. Saved on this device.'));
+      box.appendChild(h('p', 'ksub', 'One word per line, or separate with commas. Shared with every kid login.'));
+      var err = h('div', 'kfb bad');
       var ta = h('textarea', 'kin'); ta.rows = 10; ta.value = myList().join('\n'); ta.setAttribute('aria-label', 'Spelling words');
       box.appendChild(ta);
       box.appendChild(K.btn('SAVE', 'go', function () {
         var ws = ta.value.split(/[\n,]+/).map(function (s) { return s.trim(); }).filter(function (s) { return /^[A-Za-z' -]+$/.test(s); });
-        try { localStorage.setItem(MK, JSON.stringify(ws)); } catch (e) {}
-        ctx.again();
+        K.saveContent('spelling', { words: ws }).then(function (r) { if (r && r.error) err.textContent = 'COULD NOT SAVE. ' + (navigator.onLine ? '' : 'YOU ARE OFFLINE.'); else ctx.again(); });
       }));
+      box.appendChild(err);
       box.appendChild(K.btn('CANCEL', '', ctx.again));
     }
     function play(v) {

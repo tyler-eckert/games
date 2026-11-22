@@ -1,8 +1,8 @@
-/* Kids: family quiz. Answers are typed in by a parent and kept only on this device (never in the site's code). */
+/* Kids: family quiz. Answers are entered by a parent and stored in the database (kids_content), never in the site's code. */
 (function () {
   'use strict';
-  var K = window.Kids, h = K.h, FK = 'arcade.kids.family';
-  function read() { try { return JSON.parse(localStorage.getItem(FK)) || {}; } catch (e) { return {}; } }
+  var K = window.Kids, h = K.h;
+  function read() { return K.content.family || {}; }
   function digits(s) { return String(s || '').replace(/\D/g, ''); }
   var ABBR = { street: 'st', avenue: 'ave', road: 'rd', drive: 'dr', lane: 'ln', court: 'ct', circle: 'cir', boulevard: 'blvd', place: 'pl', north: 'n', south: 's', east: 'e', west: 'w', trail: 'trl', way: 'wy' };
   function norm(s) {
@@ -18,11 +18,15 @@
   }
   K.reg({ id: 'family', subject: 'family', title: 'FAMILY QUIZ', desc: 'Phone numbers, address and more', emoji: '📞', run: function (box, ctx) {
     var list = items();
-    if (!list.length) return setup();
+    if (!list.length) {
+      if (K.canEdit()) return setup();
+      box.appendChild(h('p', 'ksub', 'No questions yet. Ask a parent to set them up.'));
+      return;
+    }
     box.textContent = '';
     box.appendChild(h('p', 'ksub', 'Ready? Misses come back until you know them.'));
     box.appendChild(K.btn('START', 'go', start));
-    box.appendChild(K.btn('PARENTS: EDIT ANSWERS', '', setup));
+    if (K.canEdit()) box.appendChild(K.btn('PARENTS: EDIT ANSWERS', '', setup));
     function start() {
       var qs = K.shuffle(list);
       K.quiz(box, ctx, { total: qs.length, retry: true, delay: 1000, make: function (i) {
@@ -44,7 +48,7 @@
     function setup() {
       var d = read(), f = {};
       box.textContent = '';
-      box.appendChild(h('p', 'ksub', 'For parents. These answers stay on this device only.'));
+      box.appendChild(h('p', 'ksub', 'For parents. Saved to the arcade and shared with the kid logins.'));
       function fld(key, label, val, ph) {
         var w = h('label', 'kfld', label), i = h('input', 'kin'); i.value = val || ''; i.placeholder = ph || ''; i.autocomplete = 'off';
         w.appendChild(i); box.appendChild(w); f[key] = i;
@@ -62,11 +66,12 @@
           box.appendChild(q); box.appendChild(a); ef.push([q, a]);
         })(n);
       }
+      var err = h('div', 'kfb bad');
       box.appendChild(K.btn('SAVE', 'go', function () {
         var out = { mom: f.mom.value.trim(), dad: f.dad.value.trim(), addr: f.addr.value.trim(), extra: ef.map(function (p) { return { q: p[0].value.trim(), a: p[1].value.trim() }; }).filter(function (x) { return x.q && x.a; }) };
-        try { localStorage.setItem(FK, JSON.stringify(out)); } catch (e) {}
-        ctx.again();
+        K.saveContent('family', out).then(function (r) { if (r && r.error) err.textContent = 'COULD NOT SAVE. ' + (navigator.onLine ? '' : 'YOU ARE OFFLINE.'); else ctx.again(); });
       }));
+      box.appendChild(err);
       box.appendChild(K.btn('CANCEL', '', ctx.menu));
     }
   } });

@@ -3,7 +3,8 @@
   - A 1 or a 6 brings a marble out of its base. Never land on or pass your own marble; landing exactly on
     another color sends that marble back to its base; exact count into the home row; first home wins.
   - Dice: one or two. After playing the dice, every die that showed a 1 or a 6 is rolled again (only those dice).
-    Doubles roll both dice again. This repeats as long as it keeps happening.
+    Doubles roll both dice again. This repeats as long as it keeps happening, but only dice that were actually played earn a bonus roll:
+    if you have no legal move, the turn passes with no reroll.
   - Center shortcut: each player has a port 6 holes past their start hole. Landing on the port with a 1 or a 6 drops the marble into the center; landing there any other way does nothing. It leaves the center only on a 1 and lands 8 holes behind your start hole (the last stretch before your home row).
   - Boards: up to 4 players use a square cross board (56-hole track); 5 or 6 players use a hexagon (42-hole track).
   - Online: players take turns on their own devices. Each device runs the same rules; the player whose turn it is
@@ -314,16 +315,18 @@
     });
     return list;
   }
-  function againCount() {
+  function againCount() {   // a bonus roll is only earned by dice that were actually played
+    var any = used.some(function (u) { return u; });
+    if (!any) return 0;
     if (rolls.length === 2 && rolls[0] === rolls[1]) return 2;
-    var k = 0; rolls.forEach(function (r) { if (r === 1 || r === 6) k++; });
+    var k = 0; rolls.forEach(function (r, i) { if (used[i] && (r === 1 || r === 6)) k++; });
     return k;
   }
   function endTurn() {
     var p = cur(), k = againCount();
     if (!k) { wait(400, nextPlayer); return; }
     var doubles = rolls.length === 2 && rolls[0] === rolls[1];
-    var why = doubles ? 'DOUBLES! BOTH DICE ROLL AGAIN.' : (k === 2 ? 'A 1 AND A 6! BOTH DICE ROLL AGAIN.' : 'THAT ' + (rolls.indexOf(1) > -1 ? '1' : '6') + ' EARNS ANOTHER ROLL OF ONE DIE.');
+    var why = doubles ? 'DOUBLES! BOTH DICE ROLL AGAIN.' : (k === 2 ? 'A 1 AND A 6! BOTH DICE ROLL AGAIN.' : 'THAT ' + rolls.filter(function (r, i) { return used[i] && (r === 1 || r === 6); })[0] + ' EARNS ANOTHER ROLL OF ONE DIE.');
     setMsg(name(p) + ': ' + why);
     wait(1100, function () {
       pendingCount = k; rolls = []; used = [];
@@ -797,7 +800,7 @@
   var HELP = [
     'Race your 4 marbles clockwise around the board and into your home row. Play against computers, or with friends online.',
     'Roll a 1 or a 6 to bring a marble out onto your start hole. With two dice, play each die on any marble, in whichever order you like.',
-    'Every die that shows a 1 or a 6 is rolled again, and only that die. Doubles roll both dice again.',
+    'Every die that shows a 1 or a 6 and gets played is rolled again, and only that die. Doubles roll both dice again. If you cannot move, your turn ends with no reroll.',
     'Never land on or pass your own marbles. Land exactly on another color to send it back. You need an exact count to settle into your home row.',
     'Your port is the ringed hole 6 spaces past your start. Only if you land on it with a 1 or a 6 does it drop you into the center. A marble that stops there on any other number just sits on the hole. It leaves the center only on a 1 and lands 8 spaces behind your start hole.',
     'The first player to get all 4 marbles home wins. When more than one move is possible, tap a glowing marble to move it.'
