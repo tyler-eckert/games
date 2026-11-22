@@ -33,8 +33,21 @@
     <h1>PIPE CONNECT</h1>
   </header>
 
+  <section class="screen wa-screen" id="setup">
+    <div class="setup">
+      <div class="q">GAME MODE</div>
+      <div class="seg" id="mode">
+        <button class="lv on" type="button" data-n="relaxed">RELAXED</button>
+        <button class="lv" type="button" data-n="race">RACE THE OOZE</button>
+      </div>
+      <div class="note" id="modenote">NO CLOCK. TURN PIPES AT YOUR OWN PACE.</div>
+      <button class="big-btn" id="start" type="button">START</button>
+    </div>
+  </section>
+  <div id="game" hidden>
   <section class="screen wa-screen" style="flex-direction:column;align-items:stretch;gap:8px">
     <div class="sl-stats"><span id="lvl">LEVEL 1</span><span id="tp">TAPS 0</span></div>
+    <div class="goo" id="goo" hidden><div class="gf" id="gf"></div><span id="gt">OOZE</span></div>
     <div class="pp-board" id="board" role="grid" aria-label="Pipe grid"></div>
   </section>
   <div class="bj-msg" id="msg" role="status" aria-live="polite">TAP A PIPE TO TURN IT.</div>
@@ -43,6 +56,7 @@
     <button class="big-btn alt" id="finish" type="button">FINISH</button>
   </div>
   <button class="big-btn" id="next" type="button" hidden>NEXT LEVEL</button>
+  </div>
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>

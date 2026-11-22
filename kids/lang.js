@@ -53,27 +53,42 @@
     2: ['because', 'people', 'before', 'again', 'always', 'around', 'would', 'could', 'enough', 'family', 'animal', 'together', 'garden', 'morning', 'favorite', 'house'],
     3: ['different', 'special', 'beautiful', 'thought', 'through', 'important', 'surprise', 'library', 'answer', 'country', 'probably', 'exercise', 'February', 'neighbor', 'science', 'picture']
   };
-  function myList() { var d = K.content.spelling; return d && d.words ? d.words : []; }
-  K.reg({ id: 'spell', subject: 'read', title: 'SPELLING BEE', desc: 'Hear it, spell it. Add your own list', emoji: '🐝', run: function (box, ctx) {
-    var mine = myList(), opts = [{ label: 'GRADE 1', sub: 'Sight words', value: 1 }, { label: 'GRADE 2', sub: 'Everyday words', value: 2 }, { label: 'GRADE 3', sub: 'Tricky words', value: 3 }];
-    if (mine.length) opts.push({ label: 'MY LIST', sub: mine.length + ' words from school', value: 'mine' });
+  var KID = { '474dbbe0-1c6c-4629-873b-83ec3dfa7a50': 'ivy', 'c07d695d-b2b8-4cf4-8b9c-3740e6b397d0': 'ollie' };
+  var KIDS = [['ivy', 'IVY'], ['ollie', 'OLLIE']];
+  /* Lists are stored per kid: {lists:{ivy:[...], ollie:[...]}}. An older shared list ({words:[...]}) still works for both until it is edited. */
+  function listFor(kid) {
+    var d = K.content.spelling || {};
+    if (d.lists && d.lists[kid]) return d.lists[kid];
+    return d.lists ? [] : (d.words || []);
+  }
+  function saveList(kid, words) {
+    var d = K.content.spelling || {}, lists = {};
+    KIDS.forEach(function (k) { lists[k[0]] = listFor(k[0]).slice(); });
+    lists[kid] = words;
+    return K.saveContent('spelling', { lists: lists });
+  }
+  K.reg({ id: 'spell', subject: 'read', title: 'SPELLING BEE', desc: 'Hear it, spell it. Each kid has their own list', emoji: '🐝', run: function (box, ctx) {
+    var me = KID[K.uid] || null, opts = [{ label: 'GRADE 1', sub: 'Sight words', value: 1 }, { label: 'GRADE 2', sub: 'Everyday words', value: 2 }, { label: 'GRADE 3', sub: 'Tricky words', value: 3 }];
+    var lists = {};
+    if (me) { var mine = listFor(me); if (mine.length) { opts.push({ label: 'MY LIST', sub: mine.length + ' words from school', value: 'mine' }); lists.mine = mine; } }
+    else if (K.canEdit()) KIDS.forEach(function (k) { var l = listFor(k[0]); if (l.length) { opts.push({ label: k[1] + "'S LIST", sub: l.length + ' words', value: 'kid-' + k[0] }); lists['kid-' + k[0]] = l; } });
     K.levels(box, opts, play);
-    if (K.canEdit()) box.appendChild(K.btn('EDIT MY SPELLING LIST', '', edit));
-    function edit() {
+    if (K.canEdit()) KIDS.forEach(function (k) { box.appendChild(K.btn("EDIT " + k[1] + "'S LIST", '', function () { edit(k); })); });
+    function edit(k) {
       box.textContent = '';
-      box.appendChild(h('p', 'ksub', 'One word per line, or separate with commas. Shared with every kid login.'));
+      box.appendChild(h('p', 'ksub', k[1] + "'s spelling words. One word per line, or separate with commas."));
       var err = h('div', 'kfb bad');
-      var ta = h('textarea', 'kin'); ta.rows = 10; ta.value = myList().join('\n'); ta.setAttribute('aria-label', 'Spelling words');
+      var ta = h('textarea', 'kin'); ta.rows = 10; ta.value = listFor(k[0]).join('\n'); ta.setAttribute('aria-label', k[1] + ' spelling words');
       box.appendChild(ta);
       box.appendChild(K.btn('SAVE', 'go', function () {
         var ws = ta.value.split(/[\n,]+/).map(function (s) { return s.trim(); }).filter(function (s) { return /^[A-Za-z' -]+$/.test(s); });
-        K.saveContent('spelling', { words: ws }).then(function (r) { if (r && r.error) err.textContent = 'COULD NOT SAVE. ' + (navigator.onLine ? '' : 'YOU ARE OFFLINE.'); else ctx.again(); });
+        saveList(k[0], ws).then(function (r) { if (r && r.error) err.textContent = 'COULD NOT SAVE. ' + (navigator.onLine ? '' : 'YOU ARE OFFLINE.'); else ctx.again(); });
       }));
       box.appendChild(err);
       box.appendChild(K.btn('CANCEL', '', ctx.again));
     }
     function play(v) {
-      var list = K.shuffle(v === 'mine' ? mine : SPELL[v]);
+      var list = K.shuffle(lists[v] || SPELL[v]);
       K.quiz(box, ctx, { total: Math.min(8, list.length), retry: true, delay: 900, make: function (i) {
         var w = list[i % list.length];
         return { build: function (stage, done) {

@@ -88,3 +88,6 @@
 .kst:hover{fill:#3a38a0}
 .kst.right{fill:#7dff6b}
 .kst.wrong{fill:#ff7b8a}
+.kqlist{display:flex;flex-direction:column;gap:10px;width:100%}
+.kqrow{display:flex;flex-direction:column;gap:6px;border:2px solid var(--edge);border-radius:10px;padding:8px;width:100%}
+select.kin{appearance:auto}

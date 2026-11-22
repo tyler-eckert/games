@@ -169,12 +169,13 @@
     var d = K.h('div', 'kdisp', ' ');
     d.setAttribute('aria-live', 'polite');
     var pad = K.h('div', 'kpad');
-    function show() { d.textContent = val || ' '; }
+    function show() { d.textContent = opts.fmt ? opts.fmt(val) : (val || ' '); }
+    show();
     function press(k) {
       if (locked) return;
       if (k === 'bk') val = val.slice(0, -1);
       else if (k === 'ok') {
-        if (!val) { d.classList.add('shake'); setTimeout(function () { d.classList.remove('shake'); }, 300); return; }
+        if (!val || (opts.min && val.length < opts.min)) { d.classList.add('shake'); setTimeout(function () { d.classList.remove('shake'); }, 300); return; }
         locked = true; var ok = opts.check(val);
         done(ok, ok ? 'YES!' : (opts.wrong ? opts.wrong(val) : 'NOT QUITE.')); return;
       } else if (val.length < max) val += k;

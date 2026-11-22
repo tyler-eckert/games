@@ -30,3 +30,15 @@
 .pp-c.src svg .hub{fill:var(--amber)}
 .pp-board.done .pp-c.lit{background:#0f3a3a;color:var(--green)}
 @media (prefers-reduced-motion:reduce){.pp-c .in{transition:none}}
+.setup{display:flex;flex-direction:column;gap:14px;padding:6px;align-items:stretch}
+.setup .q{font-size:9px;color:var(--pink);line-height:1.6}
+.setup .seg{width:100%}
+.setup .note{font-size:8px;line-height:1.8;color:var(--mute);min-height:30px}
+.goo{position:relative;height:22px;border:2px solid #4b7a2e;border-radius:11px;background:#0a0924;overflow:hidden}
+.goo .gf{position:absolute;inset:0 auto 0 0;width:100%;background:linear-gradient(#a6ff6b,#5fd13a);transition:width .12s linear}
+.goo span{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:8px;color:#0b0a1f;mix-blend-mode:normal}
+.goo.low .gf{background:linear-gradient(#ffb36b,#ff5d3a);animation:pulsegoo .6s steps(2) infinite}
+.goo.wait .gf{background:linear-gradient(#7a79bb,#5d5c98)}
+@keyframes pulsegoo{50%{opacity:.6}}
+.pp-board.gooed .pp-c{background:#1d3a14;color:#7dff6b}
+@media (prefers-reduced-motion:reduce){.goo.low .gf{animation:none}}

@@ -4,6 +4,7 @@
   'use strict';
   var N = 1, E = 2, S = 4, W = 8, DR = { 1: -1, 2: 0, 4: 1, 8: 0 }, DC = { 1: 0, 2: 1, 4: 0, 8: -1 }, OPP = { 1: 4, 2: 8, 4: 1, 8: 2 };
   var level = 1, total = 0, cleared = 0, n, cells, src, taps, par, over, solvedLevel;
+  var mode = 'relaxed', left = 0, budget = 0, gooTimer = null, waitT = null;
   function $(id) { return document.getElementById(id); }
   function rot(m) { return ((m << 1) | (m >> 3)) & 15; }
   function sizeFor(l) { return Math.min(8, 4 + Math.floor((l - 1) / 2)); }
@@ -73,6 +74,7 @@
       c.el = el; c.inn = inn; el.addEventListener('click', function () { turn(k); }); b.appendChild(el);
     });
     $('lvl').textContent = 'LEVEL ' + level; $('next').hidden = true; $('btns').hidden = false;
+    $('fresh').hidden = mode === 'race'; armGoo();
     $('msg').textContent = level === 1 ? 'TURN THE PIPES SO WATER REACHES EVERY ONE.' : 'GET WATER TO EVERY PIPE.';
     paint();
   }
@@ -81,6 +83,48 @@
     for (var k in lit) count++;
     return count === n * n;
   }
+  /* race mode: a tank of ooze drains after a short head start. If it runs dry before every pipe is wet, the ooze gets out. */
+  function stopGoo() { clearInterval(gooTimer); clearTimeout(waitT); gooTimer = null; waitT = null; }
+  function fmtT(s) { s = Math.max(0, Math.ceil(s)); return Math.floor(s / 60) + ':' + (s % 60 < 10 ? '0' : '') + (s % 60); }
+  function armGoo() {
+    stopGoo();
+    var goo = $('goo'); goo.hidden = mode !== 'race'; goo.className = 'goo';
+    if (mode !== 'race') return;
+    var shrink = Math.max(0.6, 1 - 0.04 * (level - 1));
+    budget = Math.round((par * 0.75 + n * n * 0.6 + 8) * shrink); left = budget;
+    $('gf').style.width = '100%';
+    var wait = 4;
+    goo.classList.add('wait'); $('gt').textContent = 'OOZE STARTS IN ' + wait;
+    $('msg').textContent = 'GET READY. THE OOZE STARTS SOON.';
+    (function countdown() {
+      waitT = setTimeout(function () {
+        wait--;
+        if (over) return;
+        if (wait > 0) { $('gt').textContent = 'OOZE STARTS IN ' + wait; countdown(); return; }
+        goo.classList.remove('wait'); $('msg').textContent = 'SOLVE IT BEFORE THE OOZE RUNS OUT!';
+        var last = Date.now();
+        gooTimer = setInterval(function () {
+          var now = Date.now(), dt = Math.min(now - last, 250); last = now;
+          if (over) return;
+          left -= dt / 1000;
+          $('gf').style.width = Math.max(0, left / budget * 100) + '%';
+          $('gt').textContent = 'OOZE ' + fmtT(left);
+          goo.classList.toggle('low', left <= budget * 0.25);
+          if (left <= 0) lose();
+        }, 100);
+      }, 1000);
+    })();
+  }
+  function lose() {
+    over = true; stopGoo();
+    $('board').classList.add('gooed'); $('goo').classList.remove('low'); $('gt').textContent = 'THE OOZE GOT OUT!';
+    $('msg').textContent = 'OUT OF TIME ON LEVEL ' + level + '.';
+    $('btns').hidden = true;
+    setTimeout(function () {
+      Endgame.show({ key: 'pipes-race', title: 'THE OOZE GOT OUT!', color: '#ff7b8a', line: 'CLEARED ' + cleared + (cleared === 1 ? ' LEVEL' : ' LEVELS'), score: total, delay: 300, onAgain: showSetup });
+    }, 900);
+  }
+  function showSetup() { over = true; stopGoo(); $('game').hidden = true; $('setup').hidden = false; }
   function turn(k) {
     if (over) return;
     var c = cells[k]; c.r = (c.r + 1) % 4; c.deg += 90; taps++;
@@ -88,17 +132,18 @@
     if (paint()) win();
   }
   function win() {
-    over = true; solvedLevel = true; cleared++;
-    var pts = Math.max(10, n * n * 10 - Math.max(0, taps - par) * 3); total += pts;
+    over = true; solvedLevel = true; cleared++; stopGoo();
+    var pts = Math.max(10, n * n * 10 - Math.max(0, taps - par) * 3), bonus = mode === 'race' ? Math.round(Math.max(0, left) * 5) : 0; pts += bonus; total += pts;
+    if (mode === 'race') $('goo').classList.remove('low');
     $('board').classList.add('done');
-    $('msg').textContent = 'WATER REACHES EVERYTHING! +' + pts;
+    $('msg').textContent = 'WATER REACHES EVERYTHING! +' + pts + (bonus ? ' (INCLUDES ' + bonus + ' TIME BONUS)' : '');
     $('btns').hidden = true; $('next').hidden = false; $('next').focus();
   }
   function finish() {
-    over = true;
+    over = true; stopGoo();
     if (!cleared) { level = 1; total = 0; newLevel(); return; }
-    Endgame.show({ key: 'pipes', title: 'NICE PLUMBING!', color: '#3ef0ff', line: 'CLEARED ' + cleared + (cleared === 1 ? ' LEVEL' : ' LEVELS'), score: total, delay: 300,
-      onAgain: function () { level = 1; total = 0; cleared = 0; newLevel(); } });
+    Endgame.show({ key: mode === 'race' ? 'pipes-race' : 'pipes', title: 'NICE PLUMBING!', color: '#3ef0ff', line: 'CLEARED ' + cleared + (cleared === 1 ? ' LEVEL' : ' LEVELS'), score: total, delay: 300,
+      onAgain: showSetup });
   }
   $('next').addEventListener('click', function () { level++; newLevel(); });
   $('fresh').addEventListener('click', function () { if (!over) newLevel(); });
@@ -109,9 +154,20 @@
       'Pipes that water can reach glow blue. Connect them all and the puzzle is solved.',
       'Every puzzle has a solution. If one feels tangled, tap NEW PUZZLE for a fresh grid at the same size.',
       'Each level adds points. Fewer extra taps earns more. The grid gets bigger and trickier as you go.',
-      'Tap FINISH to bank your points on the leaderboard.'
+      'In RACE THE OOZE, a tank of ooze drains after a short head start. Wet every pipe before it runs out. Faster solves earn a time bonus, and the tank is smaller on later levels.',
+      'Tap FINISH to bank your points on the leaderboard. Relaxed and Race have separate leaderboards.'
     ] });
   });
-  newLevel();
+  function seg(id, key) {
+    var s = $(id);
+    Array.prototype.forEach.call(s.children, function (b) {
+      b.addEventListener('click', function () {
+        mode = b.dataset.n; Array.prototype.forEach.call(s.children, function (x) { x.classList.toggle('on', x === b); });
+        $('modenote').textContent = mode === 'race' ? 'A TANK OF OOZE DRAINS AFTER A SHORT HEAD START. WET EVERY PIPE BEFORE IT RUNS DRY. FASTER SOLVES EARN A TIME BONUS.' : 'NO CLOCK. TURN PIPES AT YOUR OWN PACE.';
+      });
+    });
+  }
+  seg('mode');
+  $('start').addEventListener('click', function () { level = 1; total = 0; cleared = 0; $('setup').hidden = true; $('game').hidden = false; newLevel(); });
   Auth.require();
 })();
