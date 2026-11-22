@@ -9,8 +9,13 @@
     if (lower(g)) { var m = Math.floor(v / 60), s = v % 60; return m + ':' + (s < 10 ? '0' : '') + s; }
     return Number(v).toLocaleString();
   }
+  /* Early Sudoku scores were points, not times (they show up as 1:40). Ignore anything saved before times were used. */
+  var SUDOKU_TIMES_SINCE = Date.parse('2026-11-21T15:00:00Z');
   function read(g) {
-    try { return JSON.parse(localStorage.getItem(KEY(g))) || []; } catch (e) { return []; }
+    var l;
+    try { l = JSON.parse(localStorage.getItem(KEY(g))) || []; } catch (e) { l = []; }
+    if (lower(g)) l = l.filter(function (r) { return r.at && r.at >= SUDOKU_TIMES_SINCE; });
+    return l;
   }
   function playerName(session) {
     var email = session && session.user && session.user.email || '';
@@ -78,7 +83,7 @@
       if (!window.Auth || !Auth.client) {   // local build with no server: show this device's own scores
         return Promise.resolve(read(g).slice(0, n || 10).map(function (r) { return { player: 'THIS DEVICE', initials: r.initials, score: r.score, mine: true }; }));
       }
-      var CK = 'arcade.board.' + g;
+      var CK = 'arcade.board2.' + g;
       function cached() { try { return JSON.parse(localStorage.getItem(CK)) || []; } catch (e) { return []; } }
       if (!navigator.onLine) return Promise.resolve(cached().slice(0, n || 10));
       return Auth.session().then(function (s) {
@@ -90,6 +95,7 @@
             if (r.error) throw r.error;
             var seen = {}, out = [];
             (r.data || []).forEach(function (row) {
+              if (lower(g) && Date.parse(row.created_at) < SUDOKU_TIMES_SINCE) return;   // old points-style rows
               if (seen[row.user_id]) return;
               seen[row.user_id] = 1;
               out.push({ player: row.player, initials: row.initials, score: row.score, mine: row.user_id === me });
