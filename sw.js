@@ -5,6 +5,14 @@
 var CACHE = 'arcade-offline-v1';
 var APP = [
  "/",
+ "/slide/",
+ "/slide/game.js",
+ "/slide/index.html",
+ "/slide/style.css",
+ "/pipes/",
+ "/pipes/game.js",
+ "/pipes/index.html",
+ "/pipes/style.css",
  "/banjo/",
  "/banjo/game.js",
  "/banjo/index.html",

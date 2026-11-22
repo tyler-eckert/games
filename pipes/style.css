@@ -1,0 +1,32 @@
+.setup{display:flex;flex-direction:column;gap:14px;padding:6px;align-items:stretch}
+.setup .q{font-size:9px;color:var(--pink);line-height:1.6}
+.setup .seg{width:100%}
+.setup .note{font-size:8px;line-height:1.8;color:var(--mute)}
+.sl-stats{display:flex;justify-content:space-between;font-size:9px;color:var(--mute);padding:2px 4px}
+.sl-board{position:relative;width:100%;aspect-ratio:1;background:#0a0924;border-radius:10px;touch-action:manipulation}
+.sl-t{position:absolute;padding:2px;transition:left .14s ease,top .14s ease;border:0;background:none;font-family:inherit;color:var(--ink)}
+.sl-t>span{display:flex;width:100%;height:100%;align-items:flex-start;justify-content:flex-start;border:2px solid #0b0a1f;border-radius:6px;background-color:var(--tile);background-repeat:no-repeat;position:relative;overflow:hidden}
+.sl-t.num>span{align-items:center;justify-content:center;font-size:18px;background-image:none!important;background-color:var(--c)}
+.sl-t i{font-style:normal;font-size:8px;padding:3px 4px;background:rgba(11,10,31,.6);border-radius:0 0 6px 0;color:#fff}
+.sl-t.num i{display:none}
+.sl-t.gap{opacity:0;pointer-events:none;transition:opacity .6s ease,left .14s ease,top .14s ease}
+.sl-t.gap.fill{opacity:1}
+.sl-board.done .sl-t>span{border-color:transparent}
+.sl-ghost{position:absolute;inset:0;border-radius:10px;background-size:100% 100%;opacity:0;pointer-events:none;transition:opacity .2s;z-index:3}
+.sl-ghost.on{opacity:.92}
+.sl-btns{display:flex;gap:8px}
+.sl-btns .big-btn{flex:1;padding:0 6px;font-size:10px;min-height:48px}
+.bj-msg{font-size:10px;line-height:1.8;text-align:center;min-height:36px;color:var(--cyan)}
+@media (prefers-reduced-motion:reduce){.sl-t,.sl-t.gap{transition:none}}
+.pp-board{display:grid;width:100%;aspect-ratio:1;gap:2px;background:#0a0924;padding:2px;border-radius:10px;touch-action:manipulation}
+.pp-c{position:relative;border:0;padding:0;background:#14123a;border-radius:6px;min-width:0;min-height:0;color:#5d5c98}
+.pp-c .in{position:absolute;inset:0;transition:transform .14s ease}
+.pp-c svg{width:100%;height:100%;display:block}
+.pp-c svg .pipe{stroke:currentColor;stroke-width:12;stroke-linecap:round;fill:none}
+.pp-c svg .hub{fill:currentColor}
+.pp-c.lit{color:var(--cyan);background:#10264a}
+.pp-c.src{background:#3a2f0a}
+.pp-c.src.lit{background:#3a2f0a}
+.pp-c.src svg .hub{fill:var(--amber)}
+.pp-board.done .pp-c.lit{background:#0f3a3a;color:var(--green)}
+@media (prefers-reduced-motion:reduce){.pp-c .in{transition:none}}
