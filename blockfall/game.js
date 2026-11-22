@@ -152,6 +152,7 @@
       } else {
         lockT = 0;
         dropAcc += dt;
+        if (softHeld && dropAcc > g) dropAcc = g;   // pressing DOWN speeds the fall up; it never lets stored time dump the piece to the floor
         while (dropAcc >= g && !grounded()) {
           dropAcc -= g;
           piece.y++;
@@ -247,20 +248,21 @@
     }
     b.addEventListener('pointerdown', function (e) {
       e.preventDefault();
+      try { b.setPointerCapture(e.pointerId); } catch (x) {}
       fn();
       if (opt.repeat) t1 = setTimeout(function () { t2 = setInterval(fn, opt.repeat); }, 170);
       if (opt.down) opt.down();
     });
-    ['pointerup', 'pointerleave', 'pointercancel'].forEach(function (ev) { b.addEventListener(ev, stop); });
+    ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(function (ev) { b.addEventListener(ev, stop); });
     b.addEventListener('contextmenu', function (e) { e.preventDefault(); });
     b.addEventListener('click', function (e) { if (e.detail === 0) fn(); });
   }
   holdBtn('b-left', function () { move(-1); }, { repeat: 55 });
   holdBtn('b-right', function () { move(1); }, { repeat: 55 });
   holdBtn('b-down', function () {}, { down: function () { softHeld = true; }, up: function () { softHeld = false; } });
-  holdBtn('b-rot', function () { spin(1); });
+  holdBtn('b-rot', hardDrop);
   holdBtn('b-hold', doHold);
-  holdBtn('b-drop', hardDrop);
+  holdBtn('b-drop', function () { spin(1); });
 
   /* control layout: D-pad by default, classic six buttons optional */
   var padEl = $('pad'), padBtn = $('padmode');
@@ -284,9 +286,9 @@
 
   var HELP = [
     'Blocks fall from the top. Slide and rotate them to build solid rows with no gaps. A full row clears and scores points.',
-    'Use the D-pad: left and right slide the piece, the up arrow rotates it, and holding the down arrow falls faster. DROP slams it to the bottom. HOLD saves a piece for later (once per piece). The D button up top switches to six labelled buttons.',
+    'Use the D-pad: left and right slide the piece, the up arrow slams the piece to the bottom, and holding the down arrow makes it fall faster. ROTATE turns it. HOLD saves a piece for later (once per piece). The D button up top switches to six labelled buttons.',
     'The outline at the bottom shows where the piece will land. NEXT shows what is coming.',
-    'The game speeds up every 10 rows. It ends when the stack reaches the top. On a keyboard: arrows, Space to drop, C to hold, P to pause.'
+    'The game speeds up every 10 rows. It ends when the stack reaches the top. On a keyboard: left and right to slide, down to fall faster, up or Space to drop, X or Z to rotate, C to hold, P to pause.'
   ];
   $('help').addEventListener('click', function () {
     if (HowTo.isOpen()) return;
@@ -301,9 +303,9 @@
     if (k === 'ArrowLeft') { e.preventDefault(); move(-1); }
     else if (k === 'ArrowRight') { e.preventDefault(); move(1); }
     else if (k === 'ArrowDown') { e.preventDefault(); softHeld = true; }
-    else if (k === 'ArrowUp' || k === 'x' || k === 'X') { e.preventDefault(); if (!e.repeat) spin(1); }
+    else if (k === 'ArrowUp' || k === ' ') { e.preventDefault(); if (!e.repeat) hardDrop(); }
+    else if (k === 'x' || k === 'X') { e.preventDefault(); if (!e.repeat) spin(1); }
     else if (k === 'z' || k === 'Z') { e.preventDefault(); if (!e.repeat) spin(-1); }
-    else if (k === ' ') { e.preventDefault(); if (!e.repeat) hardDrop(); }
     else if (k === 'c' || k === 'C' || k === 'Shift') { if (!e.repeat) doHold(); }
   });
   document.addEventListener('keyup', function (e) { if (e.key === 'ArrowDown') softHeld = false; });
