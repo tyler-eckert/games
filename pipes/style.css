@@ -18,8 +18,8 @@
 .sl-btns .big-btn{flex:1;padding:0 6px;font-size:10px;min-height:48px}
 .bj-msg{font-size:10px;line-height:1.8;text-align:center;min-height:36px;color:var(--cyan)}
 @media (prefers-reduced-motion:reduce){.sl-t,.sl-t.gap{transition:none}}
-.pp-board{display:grid;width:100%;aspect-ratio:1;gap:2px;background:#0a0924;padding:2px;border-radius:10px;touch-action:manipulation}
-.pp-c{position:relative;border:0;padding:0;background:#14123a;border-radius:6px;min-width:0;min-height:0;color:#5d5c98}
+.pp-board{display:grid;flex:none;width:100%;aspect-ratio:1;gap:2px;background:#0a0924;padding:2px;border-radius:10px;touch-action:manipulation}
+.pp-c{position:relative;overflow:hidden;border:0;padding:0;background:#14123a;border-radius:6px;min-width:0;min-height:0;color:#5d5c98}
 .pp-c .in{position:absolute;inset:0;transition:transform .14s ease}
 .pp-c svg{width:100%;height:100%;display:block}
 .pp-c svg .pipe{stroke:currentColor;stroke-width:12;stroke-linecap:round;fill:none}

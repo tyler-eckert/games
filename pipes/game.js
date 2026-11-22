@@ -65,7 +65,7 @@
       }
       src = t.src; ok = !paint2();
     }
-    var b = $('board'); b.textContent = ''; b.className = 'pp-board'; b.style.gridTemplateColumns = 'repeat(' + n + ',1fr)';
+    var b = $('board'); b.textContent = ''; b.className = 'pp-board'; b.style.gridTemplateColumns = 'repeat(' + n + ',minmax(0,1fr))'; b.style.gridTemplateRows = 'repeat(' + n + ',minmax(0,1fr))';
     cells.forEach(function (c, k) {
       var el = document.createElement('button'); el.type = 'button'; el.className = 'pp-c' + (k === src ? ' src' : '');
       el.setAttribute('aria-label', 'Pipe row ' + (Math.floor(k / n) + 1) + ' column ' + (k % n + 1) + (k === src ? ', water source' : ''));
