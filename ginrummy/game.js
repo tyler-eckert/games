@@ -157,6 +157,14 @@
   });
   $('disc').addEventListener('click', function () {
     if (phase !== 'draw' || !disc.length) return;
+    // The card you take from the discard pile cannot be discarded again. If your hand can already knock and taking this card
+    // would leave no other discard that keeps it that good, taking it would force you to break your own hand, so it is not allowed.
+    var top = disc[disc.length - 1], now = E.analyze(hands.me).dw;
+    if (now <= 10) {
+      var both = hands.me.concat([top]), keep = Infinity;
+      hands.me.forEach(function (x) { var d = E.analyze(without(both, x.id)).dw; if (d < keep) keep = d; });
+      if (keep > now) { setMsg('NOT THAT CARD. IT WOULD FORCE YOU TO BREAK YOUR HAND. DRAW FROM THE DECK.'); return; }
+    }
     var c = disc.pop();
     hands.me.push(c); newId = c.id; drawnDiscId = c.id; sel = null;
     phase = 'discard';

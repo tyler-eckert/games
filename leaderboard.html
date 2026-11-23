@@ -96,7 +96,10 @@
   }
   Auth.require().then(function (s) {
     if (!s) return;
-    LIST.forEach(function (g) { fill(g[0], cardFor(g[0], g[1])); });
+    /* A to Z by game name. Levels of one game stay together in their listed order (Easy, Medium, Hard...). */
+    LIST.map(function (g, i) { return { g: g, i: i, base: g[1].split(' \u00b7 ')[0].toLowerCase() }; })
+      .sort(function (a, b) { return a.base < b.base ? -1 : a.base > b.base ? 1 : a.i - b.i; })
+      .forEach(function (o) { fill(o.g[0], cardFor(o.g[0], o.g[1])); });
     if (want) setTimeout(function () { var e = document.getElementById('g-' + want); if (e && !e.hidden) e.scrollIntoView({ block: 'start' }); }, 600);
   });
 </script>
