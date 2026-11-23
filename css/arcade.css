@@ -5,6 +5,7 @@
   --accent:var(--cyan);
 }
 *{box-sizing:border-box}
+[hidden]{display:none!important}   /* a hidden element stays hidden even when a class sets display:flex (this is what kept the initials box showing on a 0 score) */
 html,body{margin:0;background:var(--bg);color:var(--ink);font-family:'Press Start 2P',monospace}
 html,body{touch-action:pan-x pan-y pinch-zoom;-webkit-text-size-adjust:100%}
 body{min-height:100vh;min-height:100dvh;display:flex;justify-content:center}
