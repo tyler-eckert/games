@@ -161,6 +161,7 @@
     $('over-line').textContent = won ? 'SOLVED IN ' + tries + (tries === 1 ? ' TRY' : ' TRIES') : 'THE CODE IS SHOWN ON THE BOARD';
     $('over-score').textContent = 'SCORE ' + lastScore.toLocaleString();
     scoreSaved = false;
+    $('lbLink').href = '/leaderboard.html?game=' + encodeURIComponent(GAME);
     var qualifies = won && lastScore > 0 && Scores.qualifies(GAME, lastScore);
     $('initials').hidden = !qualifies;
     $('again').hidden = qualifies;

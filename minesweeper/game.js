@@ -172,6 +172,7 @@
     $('over-line').textContent = won ? cfg.label + ' CLEARED IN ' + secs + ' SEC' : 'YOU HIT A MINE';
     $('over-score').textContent = 'SCORE ' + lastScore.toLocaleString();
     scoreSaved = false;
+    $('lbLink').href = '/leaderboard.html?game=' + encodeURIComponent(gameKey());
     var q = won && lastScore > 0 && Scores.qualifies(gameKey(), lastScore);
     $('initials').hidden = !q;
     $('again').hidden = q;

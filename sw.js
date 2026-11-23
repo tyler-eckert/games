@@ -2,7 +2,7 @@
    - App files are cached on install and kept fresh: network first (3s), cache when offline.
    - The Supabase library and the pixel font are cached after the first online visit.
    - Supabase API calls (sign-in, scores, races) are never cached. */
-var CACHE = 'arcade-offline-v1';
+var CACHE = 'arcade-offline-v2';
 var APP = [
  "/",
  "/slide/",
@@ -105,7 +105,7 @@ function networkFirst(req, ms) {
     var done = false;
     function fallback() { caches.match(req, { ignoreSearch: true }).then(function (m) { if (!done) { done = true; resolve(m || Response.error()); } }); }
     var t = setTimeout(fallback, ms);
-    fetch(req).then(function (r) {
+    fetch(req, { cache: 'no-cache' }).then(function (r) {   // always revalidate: GitHub Pages lets browsers reuse a file for 10 minutes, which kept old game code running after a push
       clearTimeout(t);
       if (r && (r.ok || r.type === 'opaque')) { var copy = r.clone(); caches.open(CACHE).then(function (c) { c.put(req, copy); }); }
       if (!done) { done = true; resolve(r); }
@@ -126,7 +126,7 @@ self.addEventListener('fetch', function (e) {
   var req = e.request;
   if (req.method !== 'GET') return;
   var url = new URL(req.url);
-  if (url.origin === location.origin) { e.respondWith(networkFirst(req, 3000)); return; }
+  if (url.origin === location.origin) { e.respondWith(networkFirst(req, 4000)); return; }
   if (url.hostname === 'cdn.jsdelivr.net' || url.hostname === 'fonts.googleapis.com' || url.hostname === 'fonts.gstatic.com') {
     e.respondWith(cacheFirst(req));
   }
