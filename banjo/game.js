@@ -43,7 +43,7 @@
     return null;
   }
 
-  var cfg = { cpus: 2, speed: 4000, auto: 1 };
+  var cfg = { cpus: 2, speed: 4000, auto: 0 };   // auto-daub is not offered: players mark their own numbers
   var gid = 0, phase = 'setup', calls = [], called = {}, order = [], mine = null, marks = [], cpus = [], over = false, timer = null, net = null;
   var cells = [], cellEls = [], boardEls = {};
 
@@ -54,7 +54,7 @@
       b.addEventListener('click', function () { cfg[key] = +b.dataset.n; Array.prototype.forEach.call(s.children, function (x) { x.classList.toggle('on', x === b); }); });
     });
   }
-  seg('cpus', 'cpus'); seg('speed', 'speed'); seg('auto', 'auto');
+  seg('cpus', 'cpus'); seg('speed', 'speed');
 
   /* ---------- screens ---------- */
   function showSetup() {
@@ -83,7 +83,6 @@
   }
   function paintCard() {
     cellEls.forEach(function (b, k) { if (k !== 12) b.classList.toggle('mk', !!marks[k]); });
-    $('claim').classList.toggle('glow', !!(phase === 'play' && !over && lineDone(mine, function (n, k) { return marks[k]; })));
   }
   function paintCaller() {
     var n = calls[calls.length - 1], ball = $('ball');
@@ -114,7 +113,7 @@
       if (g !== gid) { cd.remove(); return; }
       si++;
       if (si < steps.length) { cd.textContent = steps[si]; setTimeout(tick, si === 3 ? 500 : 800); return; }
-      cd.remove(); phase = 'play'; setMsg('LISTEN FOR YOUR NUMBERS!'); paintCard();
+      cd.remove(); phase = 'play'; setMsg(''); paintCard();
       if (role !== 'guest') drawNext();
     }, 800);
     if (role === 'guest') {   // calls arrive from the host
@@ -126,7 +125,7 @@
     if (boardEls[n]) boardEls[n].classList.add('on');
     paintCaller();
     if (cfg.auto) for (var k = 0; k < 25; k++) if (mine[k] === n) marks[k] = true;
-    setMsg(LET[colOf(n)] + ' ' + n + (onCard(n) ? '. YOU HAVE IT!' : ''));
+    setMsg('');
     paintCard();
     cpus.forEach(function (c) {
       if (c.sent || over) return;
@@ -289,9 +288,9 @@
   $('help').addEventListener('click', function () {
     HowTo.show({ title: 'HOW TO PLAY BANJO', steps: [
       'Numbers are called one at a time. B is 1 to 15, A is 16 to 30, N is 31 to 45, J is 46 to 60, O is 61 to 75.',
-      'If the called number is on your card, tap it to mark it. With auto-daub on, your card marks itself.',
+      'If a called number is on your card, tap it to mark it. You have to spot your own numbers.',
       'The golden retriever in the middle is a free space.',
-      'Mark five in a row, down, across or corner to corner, then press BANJO! The first player to call it wins.',
+      'Mark five in a row, down, across or corner to corner, then press BANJO! The game will not tell you when you have one. The first player to call it wins.',
       'Press too early and nothing bad happens. Keep looking and try again.',
       'Online, one player creates a room and shares the 4-letter code. The host calls the numbers and checks every BANJO.'
     ] });

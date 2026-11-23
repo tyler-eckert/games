@@ -14,6 +14,7 @@
   function read(g) {
     var l;
     try { l = JSON.parse(localStorage.getItem(KEY(g))) || []; } catch (e) { l = []; }
+    l = l.filter(function (r) { return r && r.score > 0; });   // a score of 0 never goes on a leaderboard
     if (lower(g)) l = l.filter(function (r) { return r.at && r.at >= SUDOKU_TIMES_SINCE; });
     return l;
   }
@@ -51,6 +52,7 @@
       q.forEach(function (row) {
         chain = chain.then(function () {
           if (row.uid && row.uid !== s.user.id) return;   // belongs to another login on this device
+          if (!(row.score > 0)) { left = left.filter(function (x) { return x !== row; }); return; }   // drop any queued zero
           var body = { player: row.player, game: row.game, initials: row.initials, score: row.score };
           return sendRow(body).then(function () { left = left.filter(function (x) { return x !== row; }); });
         });
@@ -61,7 +63,7 @@
   window.addEventListener('online', flush);
   setTimeout(flush, 2500);
   function remoteSubmit(g, initials, score) {
-    if (!window.Auth || !Auth.client) return Promise.resolve();
+    if (!(score > 0) || !window.Auth || !Auth.client) return Promise.resolve();
     return Auth.session().then(function (s) {
       if (!s) return;
       var row = { player: playerName(s), game: g, initials: initials, score: Math.round(score) };
@@ -79,6 +81,7 @@
       return score > 0 && (l.length < 10 || better(g, score, l[l.length - 1].score));
     },
     submit: function (g, initials, score) {
+      if (!(score > 0)) return Promise.resolve();   // never record a zero
       var l = read(g);
       l.push({ initials: initials, score: score, at: Date.now() });
       l.sort(function (a, b) { return lower(g) ? a.score - b.score : b.score - a.score; });
@@ -104,6 +107,7 @@
             var seen = {}, out = [];
             (r.data || []).forEach(function (row) {
               if (lower(g) && Date.parse(row.created_at) < SUDOKU_TIMES_SINCE) return;   // old points-style rows
+              if (!(row.score > 0)) return;
               if (seen[row.user_id]) return;
               seen[row.user_id] = 1;
               out.push({ player: row.player, initials: row.initials, score: row.score, mine: row.user_id === me });

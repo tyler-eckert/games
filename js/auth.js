@@ -1,7 +1,7 @@
 /* Email + password sign-in only. No magic links, no password reset, no sign-up UI. */
 (function () {
   /* Build stamp shown at the bottom of every page. Bump `n` (and the date) with each push so a new build is easy to spot. */
-  var BUILD = { n: 2, date: 'Nov 22' };
+  var BUILD = { n: 3, date: 'Nov 22' };
   function stamp() {
     if (document.getElementById('build-stamp') || !document.body) return;
     var s = document.createElement('div'); s.id = 'build-stamp'; s.textContent = 'BUILD ' + BUILD.n + ' \u00b7 ' + BUILD.date.toUpperCase();
