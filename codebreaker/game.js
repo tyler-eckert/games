@@ -10,7 +10,7 @@
     { c: '#e86bff', t: '#0b0a1f', name: 'violet' }
   ];
 
-  var secret, guesses, current, status, lastScore;
+  var secret, guesses, current, status, lastScore, scoreSaved = false;
   var $ = function (id) { return document.getElementById(id); };
 
   function el(tag, cls, text) {
@@ -160,6 +160,7 @@
     title.style.textShadow = '0 0 14px ' + (won ? '#7dff6b' : '#ff7b8a');
     $('over-line').textContent = won ? 'SOLVED IN ' + tries + (tries === 1 ? ' TRY' : ' TRIES') : 'THE CODE IS SHOWN ON THE BOARD';
     $('over-score').textContent = 'SCORE ' + lastScore.toLocaleString();
+    scoreSaved = false;
     var qualifies = won && lastScore > 0 && Scores.qualifies(GAME, lastScore);
     $('initials').hidden = !qualifies;
     $('again').hidden = qualifies;
@@ -194,11 +195,11 @@
   $('initials').addEventListener('submit', function (e) {
     e.preventDefault();
     var ini = $('ini').value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 3);
-    if (!ini) return;
-    var at = Date.now();
+    if (!ini || scoreSaved || !(lastScore > 0)) return;
+    scoreSaved = true;                       // one save per game, even on repeated taps
+    $('initials').hidden = true;
+    $('again').hidden = false;
     Scores.submit(GAME, ini, lastScore).then(function () {
-      $('initials').hidden = true;
-      $('again').hidden = false;
       renderTable();
       $('again').focus();
     });

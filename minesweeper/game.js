@@ -8,7 +8,7 @@
   var MINE_SVG = '<svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="5" fill="#ff7be8"/><g stroke="#ff7be8" stroke-width="2"><line x1="10" y1="1" x2="10" y2="19"/><line x1="1" y1="10" x2="19" y2="10"/><line x1="3.5" y1="3.5" x2="16.5" y2="16.5"/><line x1="16.5" y1="3.5" x2="3.5" y2="16.5"/></g></svg>';
   var FLAG_SVG = '<svg viewBox="0 0 20 20" aria-hidden="true"><line x1="6" y1="2" x2="6" y2="18" stroke="#e9e8ff" stroke-width="2"/><polygon points="6,2 17,6.5 6,11" fill="#ffc83d"/></svg>';
 
-  var level = 'easy', cfg, cells, state, secs, timer, flagMode = false, flagsLeft, openCount, lastScore, focusIdx = 0, press = null;
+  var level = 'easy', cfg, cells, state, secs, timer, flagMode = false, flagsLeft, openCount, lastScore, scoreSaved = false, focusIdx = 0, press = null;
   var $ = function (id) { return document.getElementById(id); };
   var grid = $('grid');
 
@@ -171,6 +171,7 @@
     title.style.textShadow = '0 0 14px ' + (won ? '#7dff6b' : '#ff7b8a');
     $('over-line').textContent = won ? cfg.label + ' CLEARED IN ' + secs + ' SEC' : 'YOU HIT A MINE';
     $('over-score').textContent = 'SCORE ' + lastScore.toLocaleString();
+    scoreSaved = false;
     var q = won && lastScore > 0 && Scores.qualifies(gameKey(), lastScore);
     $('initials').hidden = !q;
     $('again').hidden = q;
@@ -252,10 +253,11 @@
   $('initials').addEventListener('submit', function (e) {
     e.preventDefault();
     var ini = $('ini').value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 3);
-    if (!ini) return;
+    if (!ini || scoreSaved || !(lastScore > 0)) return;
+    scoreSaved = true;                       // one save per game, even on repeated taps
+    $('initials').hidden = true;
+    $('again').hidden = false;
     Scores.submit(gameKey(), ini, lastScore).then(function () {
-      $('initials').hidden = true;
-      $('again').hidden = false;
       renderTable();
       $('again').focus();
     });
