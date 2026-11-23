@@ -43,7 +43,7 @@
     $('initials').addEventListener('submit', function (e) {
       e.preventDefault();
       var ini = $('ini').value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 3);
-      if (!ini || !cur || cur.saved) return;
+      if (!ini || !cur || cur.saved || !(cur.score > 0)) return;
       cur.saved = true;                       // one save per game, even on double taps
       $('initials').hidden = true;
       $('again').hidden = false;
@@ -77,6 +77,7 @@
     show: function (o) {
       mount();
       cur = o;
+      o.score = Math.round(Number(o.score) || 0);   // a score that rounds to 0 counts as 0
       var title = $('over-title');
       title.textContent = o.title;
       title.style.color = o.color || '#7dff6b';

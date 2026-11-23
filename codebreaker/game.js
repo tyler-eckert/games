@@ -160,7 +160,7 @@
     title.style.textShadow = '0 0 14px ' + (won ? '#7dff6b' : '#ff7b8a');
     $('over-line').textContent = won ? 'SOLVED IN ' + tries + (tries === 1 ? ' TRY' : ' TRIES') : 'THE CODE IS SHOWN ON THE BOARD';
     $('over-score').textContent = 'SCORE ' + lastScore.toLocaleString();
-    var qualifies = won && Scores.qualifies(GAME, lastScore);
+    var qualifies = won && lastScore > 0 && Scores.qualifies(GAME, lastScore);
     $('initials').hidden = !qualifies;
     $('again').hidden = qualifies;
     $('table').hidden = true;

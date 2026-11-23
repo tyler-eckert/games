@@ -78,10 +78,10 @@
     lower: lower, fmt: fmt, better: better,
     qualifies: function (g, score) {
       var l = read(g);
-      return score > 0 && (l.length < 10 || better(g, score, l[l.length - 1].score));
+      return Math.round(score) > 0 && (l.length < 10 || better(g, score, l[l.length - 1].score));
     },
     submit: function (g, initials, score) {
-      if (!(score > 0)) return Promise.resolve();   // never record a zero
+      if (!(Math.round(score) > 0)) return Promise.resolve();   // never record a zero
       var l = read(g);
       l.push({ initials: initials, score: score, at: Date.now() });
       l.sort(function (a, b) { return lower(g) ? a.score - b.score : b.score - a.score; });

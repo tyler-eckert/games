@@ -171,7 +171,7 @@
     title.style.textShadow = '0 0 14px ' + (won ? '#7dff6b' : '#ff7b8a');
     $('over-line').textContent = won ? cfg.label + ' CLEARED IN ' + secs + ' SEC' : 'YOU HIT A MINE';
     $('over-score').textContent = 'SCORE ' + lastScore.toLocaleString();
-    var q = won && Scores.qualifies(gameKey(), lastScore);
+    var q = won && lastScore > 0 && Scores.qualifies(gameKey(), lastScore);
     $('initials').hidden = !q;
     $('again').hidden = q;
     $('table').hidden = true;
