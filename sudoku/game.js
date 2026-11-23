@@ -23,6 +23,7 @@
   /* ---------- game flow ---------- */
   function newGame(lv) {
     level = lv;
+    if (window.Auth && Auth.play) Auth.play('sudoku-' + lv);
     Array.prototype.forEach.call(document.querySelectorAll('.lv'), function (b) { b.classList.toggle('on', b.dataset.lv === level); });
     var rnd = level === 'daily' ? SudokuEngine.mulberry32(SudokuEngine.dailySeed()) : Math.random;
     var gen = SudokuEngine.generate(level, rnd);
@@ -394,6 +395,7 @@
       n--; setTimeout(tick, 1000);
     }
     function begin() {
+    if (window.Auth && Auth.play) Auth.play('sudoku-race', { now: true });
       level = pl.level; puzzle = gen.puzzle; solution = gen.solution; vals = puzzle.slice(); notes = new Array(81).fill(0);
       secs = 0; hints = 0; sel = -1; won = false; hist = []; notesMode = false;
       Endgame.hide();

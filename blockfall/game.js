@@ -132,6 +132,7 @@
     });
   }
   function newGame() {
+    if (window.Auth && Auth.play) Auth.play('blockfall');
     board = emptyBoard();
     queue = []; held = null; canHold = true;
     score = 0; lines = 0; level = 1; softHeld = false;

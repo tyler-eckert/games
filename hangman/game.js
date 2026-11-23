@@ -15,6 +15,7 @@
     return pool.pop();
   }
   function newGame() {
+    if (window.Auth && Auth.play) Auth.play('hangman');
     score = 0; solved = 0; over = false;
     Endgame.hide();
     nextWord();

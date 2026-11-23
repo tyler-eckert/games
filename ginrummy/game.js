@@ -27,6 +27,7 @@
     return d;
   }
   function newMatch() {
+    if (window.Auth && Auth.play) Auth.play('ginrummy');
     token++;
     totals = { me: 0, cpu: 0 }; wins = { me: 0, cpu: 0 }; handNo = 0; matchOver = false;
     Endgame.hide();

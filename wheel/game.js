@@ -54,6 +54,7 @@
 
   /* ---------- flow ---------- */
   function newGame() {
+    if (window.Auth && Auth.play) Auth.play('wheel');
     token++;
     pool = []; puzzleNo = 1; total = 0; solvedCount = 0;
     Endgame.hide();

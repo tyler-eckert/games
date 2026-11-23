@@ -27,6 +27,7 @@
     $('hint').textContent = 'TAP OR PRESS SPACE TO LAUNCH';
   }
   function newGame() {
+    if (window.Auth && Auth.play) Auth.play('brickbounce');
     score = 0; lives = 3; level = 1; base = BASE_SPEED;
     pw = PW0; px = (W - pw) / 2;
     buildBricks(); attach();

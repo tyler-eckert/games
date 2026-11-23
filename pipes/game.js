@@ -168,6 +168,6 @@
     });
   }
   seg('mode');
-  $('start').addEventListener('click', function () { level = 1; total = 0; cleared = 0; $('setup').hidden = true; $('game').hidden = false; newLevel(); });
+  $('start').addEventListener('click', function () { if (window.Auth && Auth.play) Auth.play(mode === 'race' ? 'pipes-race' : 'pipes', { now: true }); level = 1; total = 0; cleared = 0; $('setup').hidden = true; $('game').hidden = false; newLevel(); });
   Auth.require();
 })();

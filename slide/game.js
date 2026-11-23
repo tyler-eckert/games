@@ -69,7 +69,8 @@
   function clock() { if (!over && t0) $('tm').textContent = 'TIME ' + fmt(Math.floor((Date.now() - t0) / 1000)); }
 
   function begin() {
-    n = cfg.size; grid = shuffled(n); undo = []; moves = 0; over = false; t0 = 0;
+    n = cfg.size; if (window.Auth && Auth.play) Auth.play('slide-' + n, { now: true });
+    grid = shuffled(n); undo = []; moves = 0; over = false; t0 = 0;
     $('setup').hidden = true; $('game').hidden = false; $('msg').textContent = 'TAP A TILE NEXT TO THE GAP.';
     $('tm').textContent = 'TIME 0:00'; build(); place();
     clearInterval(tick); tick = setInterval(clock, 500);

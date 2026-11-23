@@ -87,6 +87,7 @@
     });
   };
   K.launch = function (g) {
+    if (window.Auth && Auth.play) Auth.play('kids-' + g.id, { now: true });
     var body = K.screen(g.title, g.desc, function () { K.subject(g.subject); });
     g.run(body, { again: function () { K.launch(g); }, menu: function () { K.subject(g.subject); }, game: g });
   };

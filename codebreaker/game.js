@@ -170,6 +170,7 @@
   }
 
   function newGame() {
+    if (window.Auth && Auth.play) Auth.play('codebreaker');
     secret = [];
     for (var i = 0; i < LEN; i++) secret.push(Math.floor(Math.random() * COLORS.length));
     guesses = []; current = []; status = 'play';

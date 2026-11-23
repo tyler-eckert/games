@@ -52,6 +52,7 @@
 
   function newGame() {
     cfg = LEVELS[level];
+    if (window.Auth && Auth.play) Auth.play(gameKey());
     stopTimer();
     secs = 0; flagsLeft = cfg.mines; openCount = 0; state = 'ready';
     grid.textContent = '';

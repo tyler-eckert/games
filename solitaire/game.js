@@ -64,6 +64,7 @@
 
   /* ---------- game flow ---------- */
   function deal(draw) {
+    if (window.Auth && Auth.play) Auth.play('solitaire-draw' + draw);
     var deck = [], s, r, i, j;
     for (s = 0; s < 4; s++) for (r = 1; r <= 13; r++) deck.push({ s: s, r: r, up: false });
     for (i = deck.length - 1; i > 0; i--) {

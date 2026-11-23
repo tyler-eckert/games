@@ -99,6 +99,7 @@
 
   /* ---------- a game ---------- */
   function newGame(role) {   // role: 'solo' | 'host' | 'guest'
+    if (window.Auth && Auth.play) Auth.play(role === 'solo' ? 'banjo' : 'banjo-online', { now: true });
     gid++; clearTimeout(timer); over = false;
     calls = []; called = {}; order = role === 'guest' ? [] : shuffle(Array.apply(null, Array(75)).map(function (_, k) { return k + 1; }));
     mine = makeCard(); marks = []; marks[12] = true;

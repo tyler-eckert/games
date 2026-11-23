@@ -225,6 +225,7 @@
     beginTurn();
   }
   function startGame(n) {
+    if (window.Auth && Auth.play) Auth.play('wahoo', { now: true });
     gameId++;
     leaveNet();
     opps = n;
@@ -547,6 +548,7 @@
     startNet(payload);
   }
   function startNet(pl) {
+    if (window.Auth && Auth.play) Auth.play('wahoo-online', { now: true });
     net.state = 'play'; net.ev = 0; net.queue = {}; net.gone = {};
     dice2 = !!pl.dice2;
     var list = pl.order.map(function (h) { return { kind: h.uid === net.uid ? 'me' : 'remote', name: h.name, uid: h.uid }; });
