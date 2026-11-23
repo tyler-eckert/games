@@ -20,3 +20,10 @@
 .pad.dpad #b-down{grid-area:down}.pad.dpad #b-hold{grid-area:hold}.pad.dpad #b-drop{grid-area:drop;font-size:11px}
 .pad.dpad .w{display:none}.pad.dpad .s{display:inline;font-size:16px}
 .pad.dpad .btn{min-height:0;padding:0}
+
+.bf .well{position:relative}
+.mult{position:absolute;left:0;right:0;top:34%;text-align:center;font-size:34px;color:#fff;pointer-events:none;opacity:0;text-shadow:0 0 14px currentColor}
+.mult.m1{color:#3ef0ff}.mult.m2{color:#7dff6b}.mult.m3{color:#ffc83d}.mult.m4{color:#ff7be8}
+.mult.show{animation:multpop 1.1s ease-out forwards}
+@keyframes multpop{0%{opacity:0;transform:scale(.6)}15%{opacity:1;transform:scale(1.15)}30%{transform:scale(1)}80%{opacity:1}100%{opacity:0;transform:translateY(-14px)}}
+@media (prefers-reduced-motion:reduce){.mult.show{animation:none;opacity:1}}

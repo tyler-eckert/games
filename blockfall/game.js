@@ -11,7 +11,7 @@
     J: [[1, 0, 0], [1, 1, 1], [0, 0, 0]],
     L: [[0, 0, 1], [1, 1, 1], [0, 0, 0]]
   };
-  var LINE_PTS = [0, 100, 300, 500, 800];
+  var LINE_PTS = [0, 100, 200, 300, 400];   // 100 points per line cleared, then multiplied by the number of lines cleared at once (1x, 2x, 3x, 4x)
 
   var $ = function (id) { return document.getElementById(id); };
   var cv = $('board'), cx = cv.getContext('2d');
@@ -113,13 +113,20 @@
     while (kept.length < ROWS) kept.unshift(new Array(COLS).fill(null));
     board = kept;
     if (cleared) {
-      score += LINE_PTS[cleared] * level;
+      score += LINE_PTS[cleared] * cleared * level;
+      flashMult(cleared);
       lines += cleared;
       level = 1 + Math.floor(lines / 10);
     }
     canHold = true;
     if (over) { gameOver(); return; }
     spawn(nextType());
+  }
+  var multT = null;
+  function flashMult(n) {
+    var m = $('mult'); if (!m) return;
+    m.textContent = n + 'X'; m.className = 'mult m' + Math.min(n, 4); void m.offsetWidth; m.classList.add('show');
+    clearTimeout(multT); multT = setTimeout(function () { m.classList.remove('show'); }, 1100);
   }
   function gameOver() {
     if (state === 'over') return;
@@ -286,7 +293,7 @@
   $('pause').addEventListener('click', togglePause);
 
   var HELP = [
-    'Blocks fall from the top. Slide and rotate them to build solid rows with no gaps. A full row clears and scores points.',
+    'Blocks fall from the top. Slide and rotate them to build solid rows with no gaps. A full row clears and scores 100 points. Clear several rows at once for a multiplier: 2 rows score 2x, 3 rows 3x, 4 rows 4x.',
     'Use the D-pad: left and right slide the piece, the up arrow slams the piece to the bottom, and holding the down arrow makes it fall faster. ROTATE turns it. HOLD saves a piece for later (once per piece). The D button up top switches to six labelled buttons.',
     'The outline at the bottom shows where the piece will land. NEXT shows what is coming.',
     'The game speeds up every 10 rows. It ends when the stack reaches the top. On a keyboard: left and right to slide, down to fall faster, up or Space to drop, X or Z to rotate, C to hold, P to pause.'

@@ -25,6 +25,10 @@
     .gc.focus{border-color:var(--cyan);box-shadow:0 0 14px rgba(62,240,255,.25)}
     .gc h2{margin:0 0 8px;font-size:10px;font-weight:400;color:var(--cyan);display:flex;justify-content:space-between;gap:8px}
     .gc h2 small{color:var(--mute);font-size:8px}
+    .gc{cursor:pointer}
+    .gc h2 a{color:inherit;text-decoration:none}
+    .gc h2 a:hover{text-decoration:underline}
+    .gc .go{color:var(--green);font-size:8px;margin:-2px 0 8px;display:block}
     .lb{max-height:192px;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;display:flex;flex-direction:column;gap:4px;padding-right:2px}
     .lb .r{display:grid;grid-template-columns:30px 1fr auto;gap:8px;align-items:center;min-height:36px;padding:0 10px;background:#14123a;border-radius:6px;font-size:9px;flex:none}
     .lb .r.mine{outline:2px solid var(--amber);color:var(--amber)}
@@ -58,13 +62,20 @@
   ];
   var page = document.getElementById('page');
   var want = new URLSearchParams(location.search).get('game');
+  /* Which page launches each leaderboard: levels and modes of one game share its page. */
+  function gameHref(key) {
+    var k = key.split('-')[0];
+    return '/' + k + '/';
+  }
   function cardFor(key, title) {
     var c = document.createElement('section'); c.className = 'gc' + (key === want ? ' focus' : ''); c.id = 'g-' + key;
-    var h = document.createElement('h2'); h.textContent = title;
+    var h = document.createElement('h2'), a = document.createElement('a'); a.textContent = title; a.href = gameHref(key); a.setAttribute('aria-label', 'Play ' + title); h.appendChild(a);
     var sm = document.createElement('small'); sm.textContent = Scores.lower(key) ? 'FASTEST' : 'HIGHEST'; h.appendChild(sm);
     var lb = document.createElement('div'); lb.className = 'lb';
     c.hidden = true;   // stays hidden until the game has at least one score
-    c.appendChild(h); c.appendChild(lb); page.appendChild(c);
+    var go = document.createElement('span'); go.className = 'go'; go.textContent = 'TAP TO PLAY';
+    c.addEventListener('click', function (e) { if (e.target.closest('a')) return; location.href = gameHref(key); });
+    c.appendChild(h); c.appendChild(go); c.appendChild(lb); page.appendChild(c);
     return lb;
   }
   function note(lb, t) { lb.textContent = ''; var d = document.createElement('div'); d.className = 'msg'; d.textContent = t; lb.appendChild(d); }
