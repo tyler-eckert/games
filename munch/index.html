@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=5, user-scalable=yes">
+  <meta name="theme-color" content="#0b0a1f">
+  <title>Maze Munch · Eckerthaus Arcade</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/arcade.css">
+    <link rel="stylesheet" href="style.css">
+  <script>document.documentElement.classList.add('auth-pending')</script>
+  <link rel="icon" type="image/svg+xml" href="/icons/icon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32.png">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Arcade">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+</head>
+<body>
+<main class="cab">
+  <div class="bar">
+    <a class="menu" href="../">&lt; MENU</a>
+    <div class="grow"><button class="iconbtn" id="help" type="button" aria-label="How to play">?</button></div>
+  </div>
+  <header class="marquee compact">
+    <div class="sub">ECKERTHAUS ARCADE</div>
+    <h1>MAZE MUNCH</h1>
+  </header>
+
+  <section class="screen" id="setup">
+    <div class="mm-setup">
+      <div class="mm-demo" aria-hidden="true"><i class="p"></i><span>&middot;&nbsp;&middot;&nbsp;&middot;</span><i class="g"></i></div>
+      <div class="note">EAT EVERY DOT. DODGE THE GHOSTS. GRAB A BIG DOT TO TURN THE TABLES.</div>
+      <button class="big-btn" id="start" type="button">PLAY SOLO</button>
+      <button class="big-btn alt" id="online" type="button">PLAY ONLINE</button>
+    </div>
+  </section>
+
+  <div id="game" hidden>
+    <div id="hud" class="mm-hud" aria-live="off"></div>
+    <section class="screen mm-screen"><canvas id="cv" aria-label="Maze"></canvas></section>
+    <div class="mm-pad" aria-label="Direction pad">
+      <button type="button" id="mm-up" aria-label="Up">&#9650;</button>
+      <button type="button" id="mm-left" aria-label="Left">&#9664;</button>
+      <button type="button" id="mm-down" aria-label="Down">&#9660;</button>
+      <button type="button" id="mm-right" aria-label="Right">&#9654;</button>
+    </div>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/config.js"></script>
+<script src="../js/auth.js"></script>
+<script src="../js/scores.js"></script>
+<script src="../js/howto.js"></script>
+<script src="../js/endgame.js"></script>
+<script src="game.js"></script>
+</body>
+</html>
